@@ -11,7 +11,9 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@vvs-finance/swap-sdk": "workspace:*",
     "@repo/ui": "workspace:*",
+    "ethers": "^6.13.4",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

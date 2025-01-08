@@ -1,0 +1,141 @@
+{
+  "type": "EXACT_INPUT",
+  "amountIn": {
+    "amount": {
+      "numerator": "27",
+      "denominator": "5"
+    },
+    "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+    "symbol": "USDC",
+    "decimals": 6
+  },
+  "amountOut": {
+    "amount": {
+      "numerator": "554837643939273474749787",
+      "denominator": "1000000000000000000"
+    },
+    "address": "0x904bd5a5aac0b9d88a0d47864724218986ad4a3a",
+    "symbol": "VVS",
+    "decimals": 18
+  },
+  "routes": [
+    {
+      "amountIn": {
+        "amount": {
+          "numerator": "27",
+          "denominator": "5"
+        },
+        "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+        "symbol": "USDC",
+        "decimals": 6
+      },
+      "amountOut": {
+        "amount": {
+          "numerator": "554837643939273474749787",
+          "denominator": "1000000000000000000"
+        },
+        "address": "0x904bd5a5aac0b9d88a0d47864724218986ad4a3a",
+        "symbol": "VVS",
+        "decimals": 18
+      },
+      "percentage": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "pool": [
+        {
+          "token0": {
+            "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+            "decimals": 6,
+            "symbol": "USDC"
+          },
+          "token1": {
+            "address": "0x904bd5a5aac0b9d88a0d47864724218986ad4a3a",
+            "decimals": 18,
+            "symbol": "VVS"
+          },
+          "address": "0x9504768aba141e7a097c5205154943b373e5a0e5",
+          "version": "V3_500",
+          "token0Price": {
+            "numerator": "2135826467127787620658378172340578879409046921160902883960306419552291698753478902314850647656281",
+            "denominator": "6277101735386680763835789423207666416102355444464034512896000000000000"
+          },
+          "token1Price": {
+            "numerator": "6277101735386680763835789423207666416102355444464034512896000000000000",
+            "denominator": "2135826467127787620658378172340578879409046921160902883960306419552291698753478902314850647656281"
+          },
+          "liquidity": {
+            "__serializeType": "bigint",
+            "value": "0"
+          },
+          "sqrtRatioX96": {
+            "__serializeType": "bigint",
+            "value": "1461446703485210103287273052203988822378723970341"
+          },
+          "tick": 887271
+        }
+      ],
+      "path": [
+        {
+          "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+          "symbol": "USDC",
+          "decimals": 6
+        },
+        {
+          "address": "0x904bd5a5aac0b9d88a0d47864724218986ad4a3a",
+          "decimals": 18,
+          "symbol": "VVS"
+        }
+      ],
+      "slippage": {
+        "minimumReceived": {
+          "amount": {
+            "numerator": "184945881313091158249929",
+            "denominator": "335000000000000000"
+          },
+          "address": "0x904bd5a5aac0b9d88a0d47864724218986ad4a3a",
+          "symbol": "VVS",
+          "decimals": 18
+        },
+        "type": "minimumReceived",
+        "tolerance": {
+          "numerator": "1",
+          "denominator": "200"
+        }
+      }
+    }
+  ],
+  "price": {
+    "numerator": "554832243939273474749787",
+    "denominator": "1000000000000000000"
+  },
+  "lpFeeRatio": {
+    "numerator": "1",
+    "denominator": "2000"
+  },
+  "lpFee": {
+    "amount": {
+      "numerator": "27",
+      "denominator": "10000"
+    },
+    "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+    "symbol": "USDC",
+    "decimals": 6
+  },
+  "slippage": {
+    "minimumReceived": {
+      "amount": {
+        "numerator": "184945881313091158249929",
+        "denominator": "335000000000000000"
+      },
+      "address": "0x904bd5a5aac0b9d88a0d47864724218986ad4a3a",
+      "symbol": "VVS",
+      "decimals": 18
+    },
+    "type": "minimumReceived",
+    "tolerance": {
+      "numerator": "1",
+      "denominator": "200"
+    }
+  }
+}

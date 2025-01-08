@@ -1,0 +1,150 @@
+{
+  "type": "EXACT_OUTPUT",
+  "amountIn": {
+    "amount": {
+      "numerator": "1510966745756885749",
+      "denominator": "500000000000000000"
+    },
+    "address": "NATIVE",
+    "symbol": "WCRO",
+    "decimals": 18
+  },
+  "amountOut": {
+    "amount": {
+      "numerator": "2613",
+      "denominator": "6250"
+    },
+    "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+    "symbol": "USDC",
+    "decimals": 6
+  },
+  "routes": [
+    {
+      "amountIn": {
+        "amount": {
+          "numerator": "1510966745756885749",
+          "denominator": "500000000000000000"
+        },
+        "address": "0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4",
+        "symbol": "WCRO",
+        "decimals": 18
+      },
+      "amountOut": {
+        "amount": {
+          "numerator": "2613",
+          "denominator": "6250"
+        },
+        "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+        "symbol": "USDC",
+        "decimals": 6
+      },
+      "percentage": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "pool": [
+        {
+          "token0": {
+            "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+            "decimals": 6,
+            "symbol": "USDC"
+          },
+          "token1": {
+            "address": "0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4",
+            "decimals": 18,
+            "symbol": "WCRO"
+          },
+          "address": "0xac7901efb1f279a18e3f1973664cf4057ddbf0d9",
+          "version": "V2",
+          "token0Price": {
+            "numerator": "143708918939321734269143",
+            "denominator": "19941740552671093750000"
+          },
+          "token1Price": {
+            "numerator": "19941740552671093750000",
+            "denominator": "143708918939321734269143"
+          },
+          "reserve0": {
+            "amount": {
+              "numerator": "25525427907419",
+              "denominator": "1000000"
+            },
+            "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          "reserve1": {
+            "amount": {
+              "numerator": "143708918939321734269143",
+              "denominator": "781250000000000"
+            },
+            "address": "0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4",
+            "symbol": "WCRO",
+            "decimals": 18
+          }
+        }
+      ],
+      "path": [
+        {
+          "address": "0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4",
+          "symbol": "WCRO",
+          "decimals": 18
+        },
+        {
+          "address": "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
+          "decimals": 6,
+          "symbol": "USDC"
+        }
+      ],
+      "slippage": {
+        "maximumSold": {
+          "amount": {
+            "numerator": "303704315897134035549",
+            "denominator": "100000000000000000000"
+          },
+          "address": "0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4",
+          "symbol": "WCRO",
+          "decimals": 18
+        },
+        "type": "maximumSold",
+        "tolerance": {
+          "numerator": "1",
+          "denominator": "200"
+        }
+      }
+    }
+  ],
+  "price": {
+    "numerator": "-1301926745756885749",
+    "denominator": "500000000000000000"
+  },
+  "lpFeeRatio": {
+    "numerator": "3",
+    "denominator": "1000"
+  },
+  "lpFee": {
+    "amount": {
+      "numerator": "4532900237270657247",
+      "denominator": "500000000000000000000"
+    },
+    "address": "NATIVE",
+    "symbol": "WCRO",
+    "decimals": 18
+  },
+  "slippage": {
+    "maximumSold": {
+      "amount": {
+        "numerator": "303704315897134035549",
+        "denominator": "100000000000000000000"
+      },
+      "address": "NATIVE",
+      "symbol": "WCRO",
+      "decimals": 18
+    },
+    "type": "maximumSold",
+    "tolerance": {
+      "numerator": "1",
+      "denominator": "200"
+    }
+  }
+}

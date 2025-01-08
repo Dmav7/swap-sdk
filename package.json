@@ -2,12 +2,15 @@
   "name": "swap-sdk",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
+    "build": "dotenvx run -- turbo build --force",
+    "dev": "dotenvx run -- turbo dev",
+    "lint": "dotenvx run -- turbo lint",
+    "test": "dotenvx run -- turbo test",
+    "test:swap-sdk": "dotenvx run -- turbo test --filter=@vvs-finance/swap-sdk",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@dotenvx/dotenvx": "^1.32.1",
     "prettier": "^3.2.5",
     "turbo": "^2.3.3",
     "typescript": "5.5.4"
