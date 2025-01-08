@@ -7,6 +7,7 @@
     "lint": "dotenvx run -- turbo lint",
     "test": "dotenvx run -- turbo test",
     "test:swap-sdk": "dotenvx run -- turbo test --filter=@vvs-finance/swap-sdk",
+    "publish:swap-sdk": "dotenvx run -- turbo publish --filter=@vvs-finance/swap-sdk",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {

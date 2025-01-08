@@ -12,7 +12,8 @@
     "ts-check": "tsc --noEmit",
     "test": "jest",
     "dev": "tsup --watch",
-    "build": "rm -rf dist && tsup"
+    "build": "rm -rf dist && tsup",
+    "publish": "npm publish"
   },
   "tsup": {
     "entry": ["src/index.ts"],
