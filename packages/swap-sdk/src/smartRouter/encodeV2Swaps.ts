@@ -6,13 +6,13 @@ import { mapRoutePath, routePath } from "../utils/mapReduceRoutePath";
 import { tokenAmountToWei } from "../utils/tokenAmountToWei";
 import { ADDRESS_THIS, MSG_SENDER } from "./consts";
 import { encodeSmartRouterFunctionData } from "./contractInterfaces";
-import type { EncodableTradeRoute, EncodeTradeOptions } from "./types";
+import type { EncodableTradeRoute, EncodeArgs } from "./types";
 
 export function encodeV2Swaps(
   route: EncodableTradeRoute,
   tradeType: TradeType,
   outputCustodyDuringTx: boolean,
-  options: EncodeTradeOptions,
+  encodeArgs: EncodeArgs,
 ): string {
   if (mapRoutePath(route, (_, p) => p.version).some((v) => v !== PoolType.V2)) {
     throw new Error("encodeV2Swap: route includes pools beside PoolType.V2");
@@ -21,9 +21,9 @@ export function encodeV2Swaps(
 
   const recipient = outputCustodyDuringTx
     ? ADDRESS_THIS
-    : typeof options.recipient === "undefined"
+    : typeof encodeArgs.recipient === "undefined"
       ? MSG_SENDER
-      : getAddress(options.recipient);
+      : getAddress(encodeArgs.recipient);
 
   if (tradeType === TradeType.EXACT_INPUT) {
     const minimumReceived =

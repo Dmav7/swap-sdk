@@ -18,6 +18,7 @@ describe("fetchQuoteApi", () => {
     inputTokenAddress: "0x6a3173618859C7cd40fAF6921b5E9eB6A76f1fD4",
     outputTokenAddress: "0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b",
     amount: "10",
+    quoteApiClientId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   };
 
   describe("happy path", () => {
@@ -44,6 +45,7 @@ describe("fetchQuoteApi", () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-client-id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
           },
           body: JSON.stringify({
             chain: "CRONOS",

@@ -4,8 +4,8 @@ import { SmartRouter as SmartRouterAbi } from "./abis";
 import type { ContractAddressMap, ContractName } from "./config";
 import { getContractAddress } from "./config";
 import { QUOTE_API_ENDPOINT_BY_CHAIN } from "./config/quoteApi";
-import type { ExecuteTradeOptions } from "./executeTrade";
-import { executeTrade } from "./executeTrade";
+import type { ExecuteTradeOptions, TradeTxOptions } from "./executeTrade";
+import { executeTrade, prepareTradeTxRequest } from "./executeTrade";
 import type { AmountArg, InputOutputTokenArg } from "./fetchBestTrade";
 import { fetchBestTrade } from "./fetchBestTrade";
 import type { BestAMMTradeOpts, SignerOrProvider, Trade } from "./types";
@@ -67,6 +67,19 @@ export class SwapSDK {
       routerAddress: this.getContractAddress("SmartRouter"),
       ...options,
     });
+  }
+
+  public prepareTradeTxRequest(
+    trade: Trade,
+    recipient: string,
+    options: TradeTxOptions = {},
+  ) {
+    return prepareTradeTxRequest(
+      this.providerOptions.chainId,
+      trade,
+      recipient,
+      options,
+    );
   }
 
   private getContract = <T extends BaseContract = BaseContract>(

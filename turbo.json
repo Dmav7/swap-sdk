@@ -20,9 +20,11 @@
       "cache": false,
       "persistent": true
     },
-    "publish": {
+    "release": {
       "dependsOn": ["build"]
-
+    },
+    "release-local": {
+      "dependsOn": ["build"]
     }
   },
   "envMode": "loose",

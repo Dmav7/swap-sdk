@@ -85,6 +85,7 @@ export interface BestAMMTradeOpts {
   poolTypes: PoolType[];
   slippageTolerance: number;
   quoteApiEndpoint?: string;
+  quoteApiClientId?: string;
 }
 
 export interface TradeExtraInfo {

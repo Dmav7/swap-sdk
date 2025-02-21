@@ -1,6 +1,9 @@
 import { Fraction } from "bi-fraction";
 
-import { DEFAULT_FETCH_QUOTE_OPTS } from "./config/quoteApi";
+import {
+  DEFAULT_FETCH_QUOTE_OPTS,
+  QUOTE_API_ENDPOINT_BY_CHAIN,
+} from "./config/quoteApi";
 import { WRAPPED_NATIVE_TOKEN_BY_CHAIN } from "./config/wrappedNativeToken";
 import { fetchQuoteApi } from "./quoteApi/fetchQuoteApi";
 import { parseQuoteApiData } from "./quoteApi/parseQuoteApiData";
@@ -29,10 +32,6 @@ export async function fetchBestTrade(
   amount: AmountArg,
   argOpts: Partial<BestAMMTradeOpts> = {},
 ): Promise<Trade> {
-  const opts = {
-    ...DEFAULT_FETCH_QUOTE_OPTS,
-    ...argOpts,
-  };
   const [isInputNative, inputTokenAddress] = parseAndWrapNativeTokenAddr(
     chainId,
     inputTokenAddressArg,
@@ -42,11 +41,16 @@ export async function fetchBestTrade(
     outputTokenAddressArg,
   );
 
+  const opts = {
+    ...DEFAULT_FETCH_QUOTE_OPTS,
+    ...argOpts,
+  };
+
   const quoteData = await fetchQuoteApi({
     chainId,
-    amount: parseAmountArg(amount),
     inputTokenAddress,
     outputTokenAddress,
+    amount: parseAmountArg(amount),
     ...opts,
   });
 

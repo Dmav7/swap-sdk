@@ -2,35 +2,35 @@ import type { NativeOrTokenAmount, TokenAmount, Trade } from "../types";
 import { TradeType } from "../types";
 import { tokenAmountToWei } from "../utils/tokenAmountToWei";
 import { encodeSmartRouterFunctionData } from "./contractInterfaces";
-import type { EncodeTradeOptions, TradeFeeOptions } from "./types";
+import type { EncodeArgs, TradeFeeOptions } from "./types";
 
-export function encodeUnwrapWETH9(trade: Trade, options: EncodeTradeOptions) {
+export function encodeUnwrapWETH9(trade: Trade, encodeArgs: EncodeArgs) {
   const minimumAmountWei = tokenAmountToWei(unwrapOrSweepAmount(trade));
 
-  if (options.fee) {
+  if (encodeArgs.fee) {
     return encodeSmartRouterFunctionData(
       "unwrapWETH9WithFee(uint256,address,uint256,address)",
       [
         minimumAmountWei,
-        options.recipient,
-        encodeFeeBips(options.fee),
-        options.fee.recipient,
+        encodeArgs.recipient,
+        encodeFeeBips(encodeArgs.fee),
+        encodeArgs.fee.recipient,
       ],
     );
   }
 
   return encodeSmartRouterFunctionData("unwrapWETH9", [
     minimumAmountWei,
-    options.recipient,
+    encodeArgs.recipient,
   ]);
 }
 
-export function encodeSweepToken(trade: Trade, options: EncodeTradeOptions) {
+export function encodeSweepToken(trade: Trade, encodeArgs: EncodeArgs) {
   const minimumAmount = unwrapOrSweepAmount(trade);
   const minimumAmountWei = tokenAmountToWei(minimumAmount);
-  const recipient = options.recipient;
+  const recipient = encodeArgs.recipient;
 
-  if (options.fee) {
+  if (encodeArgs.fee) {
     if (recipient) {
       return encodeSmartRouterFunctionData(
         "sweepTokenWithFee(address,uint256,address,uint256,address)",
@@ -38,8 +38,8 @@ export function encodeSweepToken(trade: Trade, options: EncodeTradeOptions) {
           minimumAmount.address,
           minimumAmountWei,
           recipient,
-          encodeFeeBips(options.fee),
-          options.fee.recipient,
+          encodeFeeBips(encodeArgs.fee),
+          encodeArgs.fee.recipient,
         ],
       );
     }
@@ -49,8 +49,8 @@ export function encodeSweepToken(trade: Trade, options: EncodeTradeOptions) {
       [
         minimumAmount.address,
         minimumAmountWei,
-        encodeFeeBips(options.fee),
-        options.fee.recipient,
+        encodeFeeBips(encodeArgs.fee),
+        encodeArgs.fee.recipient,
       ],
     );
   }

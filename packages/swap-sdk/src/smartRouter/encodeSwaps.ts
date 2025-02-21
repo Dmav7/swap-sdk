@@ -2,13 +2,13 @@ import type { TradeType } from "../types";
 import { encodeV2Swaps } from "./encodeV2Swaps";
 import { encodeSingleHopV3Swap, encodeV3Swaps } from "./encodeV3Swaps";
 import { partitionRouteByProtocol } from "./partitionRouteByProtocol";
-import type { EncodableTradeRoute, EncodeTradeOptions } from "./types";
+import type { EncodableTradeRoute, EncodeArgs } from "./types";
 
 export function encodeSwaps(
   route: EncodableTradeRoute,
   tradeType: TradeType,
   outputCustodyDuringTx: boolean,
-  options: EncodeTradeOptions,
+  encodeArgs: EncodeArgs,
 ): string[] {
   const partitionedRoutes = partitionRouteByProtocol(route);
 
@@ -21,14 +21,14 @@ export function encodeSwaps(
           partitionedRoute,
           tradeType,
           partitionOutputCustodyDuringTx,
-          options,
+          encodeArgs,
         );
       } else {
         return encodeV3Swaps(
           partitionedRoute,
           tradeType,
           partitionOutputCustodyDuringTx,
-          options,
+          encodeArgs,
         );
       }
     }
@@ -38,7 +38,7 @@ export function encodeSwaps(
         partitionedRoute,
         tradeType,
         partitionOutputCustodyDuringTx,
-        options,
+        encodeArgs,
       );
     }
 

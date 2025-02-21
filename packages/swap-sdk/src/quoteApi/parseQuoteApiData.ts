@@ -34,7 +34,7 @@ export function parseQuoteApiData(
 
   const routes = quoteData.routes.map((route) => parseRoute(route, opts));
 
-  const price = new Fraction(amountOut.amount).sub(amountIn.amount);
+  const price = new Fraction(amountOut.amount).div(amountIn.amount);
 
   const lpFeeRatio = routes.reduce((sum, r) => {
     const remain = r.pool.reduce(

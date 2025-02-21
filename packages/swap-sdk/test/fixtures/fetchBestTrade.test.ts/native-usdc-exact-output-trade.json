@@ -115,8 +115,8 @@
     }
   ],
   "price": {
-    "numerator": "-1301926745756885749",
-    "denominator": "500000000000000000"
+    "denominator": "1510966745756885749",
+    "numerator": "209040000000000000"
   },
   "lpFeeRatio": {
     "numerator": "3",

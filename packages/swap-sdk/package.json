@@ -1,6 +1,6 @@
 {
   "name": "@vvs-finance/swap-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "files": [
     "dist"
@@ -13,7 +13,8 @@
     "test": "jest",
     "dev": "tsup --watch",
     "build": "rm -rf dist && tsup",
-    "publish": "npm publish"
+    "release": "pnpm publish",
+    "release-local": "yalc publish"
   },
   "tsup": {
     "entry": ["src/index.ts"],

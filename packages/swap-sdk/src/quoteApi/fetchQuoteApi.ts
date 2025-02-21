@@ -1,11 +1,11 @@
 import fetch from "node-fetch";
 
-import { QUOTE_API_ENDPOINT_BY_CHAIN } from "../config/quoteApi";
 import { SupportedChainId } from "../types";
 import { PoolType, TradeType } from "../types/base";
 import type { BestAMMTradeOpts } from "../types/trade";
 import {
   NetworkUnsupportedError,
+  NoQuoteApiClientIdError,
   NoQuoteApiEndpointError,
   PoolUnsupportedError,
   ServerChainUnsupportedError,
@@ -16,6 +16,7 @@ import {
   TradeTypeUnsupportedError,
 } from "./errors";
 import type { TradeQuoteData } from "./types";
+import { QUOTE_API_ENDPOINT_BY_CHAIN } from "../config/quoteApi";
 
 const API_CHAIN_NAMES: Record<SupportedChainId, string> = {
   [SupportedChainId.CRONOS_MAINNET]: "CRONOS",
@@ -62,6 +63,7 @@ export async function fetchQuoteApi(
     maxSplits,
     poolTypes,
     quoteApiEndpoint,
+    quoteApiClientId,
   } = args;
   const chainName = API_CHAIN_NAMES[chainId];
   if (!chainName) {
@@ -70,10 +72,16 @@ export async function fetchQuoteApi(
 
   const endpoint =
     quoteApiEndpoint ??
-    QUOTE_API_ENDPOINT_BY_CHAIN[chainId] ??
-    process.env[`QUOTE_API_ENDPOINT_${chainId}`];
+    process.env[`SWAP_SDK_QUOTE_API_ENDPOINT_${chainId}`] ??
+    QUOTE_API_ENDPOINT_BY_CHAIN[chainId];
+  const clientId =
+    quoteApiClientId ?? process.env[`SWAP_SDK_QUOTE_API_CLIENT_ID_${chainId}`];
+
   if (!endpoint) {
     throw new NoQuoteApiEndpointError(chainId);
+  }
+  if (!clientId) {
+    throw new NoQuoteApiClientIdError(chainId);
   }
 
   const apiTradeType = API_TRADE_TYPES[tradeType];
@@ -90,6 +98,7 @@ export async function fetchQuoteApi(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-client-id": clientId,
     },
     body: JSON.stringify({
       chain: chainName,

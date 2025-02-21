@@ -8,11 +8,11 @@ import {
   encodeSweepToken,
   encodeUnwrapWETH9,
 } from "./encodeUnwrapSweep";
-import type { EncodeTradeOptions } from "./types";
+import type { EncodeArgs } from "./types";
 
 export function encodeTrade(
   trade: Trade,
-  options: EncodeTradeOptions,
+  encodeArgs: EncodeArgs,
 ): {
   value: bigint;
   calldata: string;
@@ -20,10 +20,10 @@ export function encodeTrade(
   const isInputNative = trade.amountIn.address === "NATIVE";
   const isOutputNative = trade.amountOut.address === "NATIVE";
 
-  const outputCustodyDuringTx = isOutputNative || !!options.fee;
+  const outputCustodyDuringTx = isOutputNative || !!encodeArgs.fee;
 
   const swapCalldatas = trade.routes.flatMap((route) =>
-    encodeSwaps(route, trade.type, outputCustodyDuringTx, options),
+    encodeSwaps(route, trade.type, outputCustodyDuringTx, encodeArgs),
   );
 
   const value = isInputNative ? nativeTokenInputAmount(trade) : 0n;
@@ -33,15 +33,15 @@ export function encodeTrade(
       ...(outputCustodyDuringTx
         ? [
             isOutputNative
-              ? encodeUnwrapWETH9(trade, options)
-              : encodeSweepToken(trade, options),
+              ? encodeUnwrapWETH9(trade, encodeArgs)
+              : encodeSweepToken(trade, encodeArgs),
           ]
         : []),
       ...(isInputNative && trade.type === TradeType.EXACT_OUTPUT
         ? [encodeRefundETH()]
         : []),
     ],
-    options.deadlineOrPreviousBlockhash,
+    encodeArgs.deadlineOrPreviousBlockhash,
   );
 
   return {

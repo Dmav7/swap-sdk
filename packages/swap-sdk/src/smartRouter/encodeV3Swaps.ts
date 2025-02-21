@@ -6,7 +6,7 @@ import { reduceRoutePath } from "../utils/mapReduceRoutePath";
 import { tokenAmountToWei } from "../utils/tokenAmountToWei";
 import { ADDRESS_THIS, MSG_SENDER } from "./consts";
 import { encodeSmartRouterFunctionData } from "./contractInterfaces";
-import type { EncodableTradeRoute, EncodeTradeOptions } from "./types";
+import type { EncodableTradeRoute, EncodeArgs } from "./types";
 
 const V3_VERSION_TO_FEE: Record<V3PoolTypes, number> = {
   [PoolType.V3_100]: 100,
@@ -19,13 +19,13 @@ export function encodeV3Swaps(
   route: EncodableTradeRoute,
   tradeType: TradeType,
   outputCustodyDuringTx: boolean,
-  options: EncodeTradeOptions,
+  encodeArgs: EncodeArgs,
 ): string {
   const recipient = outputCustodyDuringTx
     ? ADDRESS_THIS
-    : typeof options.recipient === "undefined"
+    : typeof encodeArgs.recipient === "undefined"
       ? MSG_SENDER
-      : getAddress(options.recipient);
+      : getAddress(encodeArgs.recipient);
 
   if (tradeType === TradeType.EXACT_INPUT) {
     const amountOutMinimum =
@@ -62,7 +62,7 @@ export function encodeSingleHopV3Swap(
   route: EncodableTradeRoute,
   tradeType: TradeType,
   outputCustodyDuringTx: boolean,
-  options: EncodeTradeOptions,
+  encodeArgs: EncodeArgs,
 ) {
   if (route.pool.length !== 1) {
     throw new Error("encodeSingleHopV3Swap: route is multi-hop");
@@ -74,9 +74,9 @@ export function encodeSingleHopV3Swap(
 
   const recipient = outputCustodyDuringTx
     ? ADDRESS_THIS
-    : typeof options.recipient === "undefined"
+    : typeof encodeArgs.recipient === "undefined"
       ? MSG_SENDER
-      : getAddress(options.recipient);
+      : getAddress(encodeArgs.recipient);
 
   if (tradeType === TradeType.EXACT_INPUT) {
     const amountOutMinimum =

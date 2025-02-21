@@ -6,7 +6,9 @@ export const QUOTE_API_ENDPOINT_BY_CHAIN: Partial<
   Record<SupportedChainId, string>
 > = {
   [SupportedChainId.CRONOS_MAINNET]:
-    "https://api.vvs.finance/general/api/v1/quote",
+    "https://public-api.vvs.finance/api/v1/quote",
+  [SupportedChainId.CRONOS_TESTNET]:
+    "https://testnet-public-api.vvs.finance/api/v1/quote",
 };
 
 export const DEFAULT_FETCH_QUOTE_OPTS: BestAMMTradeOpts = {
