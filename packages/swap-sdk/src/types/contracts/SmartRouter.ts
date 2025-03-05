@@ -12,22 +12,22 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers'
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from "./common";
+} from './common'
 
 export declare namespace IV3SwapRouter {
   export type ExactInputParamsStruct = {
-    path: BytesLike;
-    recipient: AddressLike;
-    amountIn: BigNumberish;
-    amountOutMinimum: BigNumberish;
-  };
+    path: BytesLike
+    recipient: AddressLike
+    amountIn: BigNumberish
+    amountOutMinimum: BigNumberish
+  }
 
   export type ExactInputParamsStructOutput = [
     path: string,
@@ -35,21 +35,21 @@ export declare namespace IV3SwapRouter {
     amountIn: bigint,
     amountOutMinimum: bigint,
   ] & {
-    path: string;
-    recipient: string;
-    amountIn: bigint;
-    amountOutMinimum: bigint;
-  };
+    path: string
+    recipient: string
+    amountIn: bigint
+    amountOutMinimum: bigint
+  }
 
   export type ExactInputSingleParamsStruct = {
-    tokenIn: AddressLike;
-    tokenOut: AddressLike;
-    fee: BigNumberish;
-    recipient: AddressLike;
-    amountIn: BigNumberish;
-    amountOutMinimum: BigNumberish;
-    sqrtPriceLimitX96: BigNumberish;
-  };
+    tokenIn: AddressLike
+    tokenOut: AddressLike
+    fee: BigNumberish
+    recipient: AddressLike
+    amountIn: BigNumberish
+    amountOutMinimum: BigNumberish
+    sqrtPriceLimitX96: BigNumberish
+  }
 
   export type ExactInputSingleParamsStructOutput = [
     tokenIn: string,
@@ -60,21 +60,21 @@ export declare namespace IV3SwapRouter {
     amountOutMinimum: bigint,
     sqrtPriceLimitX96: bigint,
   ] & {
-    tokenIn: string;
-    tokenOut: string;
-    fee: bigint;
-    recipient: string;
-    amountIn: bigint;
-    amountOutMinimum: bigint;
-    sqrtPriceLimitX96: bigint;
-  };
+    tokenIn: string
+    tokenOut: string
+    fee: bigint
+    recipient: string
+    amountIn: bigint
+    amountOutMinimum: bigint
+    sqrtPriceLimitX96: bigint
+  }
 
   export type ExactOutputParamsStruct = {
-    path: BytesLike;
-    recipient: AddressLike;
-    amountOut: BigNumberish;
-    amountInMaximum: BigNumberish;
-  };
+    path: BytesLike
+    recipient: AddressLike
+    amountOut: BigNumberish
+    amountInMaximum: BigNumberish
+  }
 
   export type ExactOutputParamsStructOutput = [
     path: string,
@@ -82,21 +82,21 @@ export declare namespace IV3SwapRouter {
     amountOut: bigint,
     amountInMaximum: bigint,
   ] & {
-    path: string;
-    recipient: string;
-    amountOut: bigint;
-    amountInMaximum: bigint;
-  };
+    path: string
+    recipient: string
+    amountOut: bigint
+    amountInMaximum: bigint
+  }
 
   export type ExactOutputSingleParamsStruct = {
-    tokenIn: AddressLike;
-    tokenOut: AddressLike;
-    fee: BigNumberish;
-    recipient: AddressLike;
-    amountOut: BigNumberish;
-    amountInMaximum: BigNumberish;
-    sqrtPriceLimitX96: BigNumberish;
-  };
+    tokenIn: AddressLike
+    tokenOut: AddressLike
+    fee: BigNumberish
+    recipient: AddressLike
+    amountOut: BigNumberish
+    amountInMaximum: BigNumberish
+    sqrtPriceLimitX96: BigNumberish
+  }
 
   export type ExactOutputSingleParamsStructOutput = [
     tokenIn: string,
@@ -107,24 +107,24 @@ export declare namespace IV3SwapRouter {
     amountInMaximum: bigint,
     sqrtPriceLimitX96: bigint,
   ] & {
-    tokenIn: string;
-    tokenOut: string;
-    fee: bigint;
-    recipient: string;
-    amountOut: bigint;
-    amountInMaximum: bigint;
-    sqrtPriceLimitX96: bigint;
-  };
+    tokenIn: string
+    tokenOut: string
+    fee: bigint
+    recipient: string
+    amountOut: bigint
+    amountInMaximum: bigint
+    sqrtPriceLimitX96: bigint
+  }
 }
 
 export declare namespace IApproveAndCall {
   export type IncreaseLiquidityParamsStruct = {
-    token0: AddressLike;
-    token1: AddressLike;
-    tokenId: BigNumberish;
-    amount0Min: BigNumberish;
-    amount1Min: BigNumberish;
-  };
+    token0: AddressLike
+    token1: AddressLike
+    tokenId: BigNumberish
+    amount0Min: BigNumberish
+    amount1Min: BigNumberish
+  }
 
   export type IncreaseLiquidityParamsStructOutput = [
     token0: string,
@@ -133,23 +133,23 @@ export declare namespace IApproveAndCall {
     amount0Min: bigint,
     amount1Min: bigint,
   ] & {
-    token0: string;
-    token1: string;
-    tokenId: bigint;
-    amount0Min: bigint;
-    amount1Min: bigint;
-  };
+    token0: string
+    token1: string
+    tokenId: bigint
+    amount0Min: bigint
+    amount1Min: bigint
+  }
 
   export type MintParamsStruct = {
-    token0: AddressLike;
-    token1: AddressLike;
-    fee: BigNumberish;
-    tickLower: BigNumberish;
-    tickUpper: BigNumberish;
-    amount0Min: BigNumberish;
-    amount1Min: BigNumberish;
-    recipient: AddressLike;
-  };
+    token0: AddressLike
+    token1: AddressLike
+    fee: BigNumberish
+    tickLower: BigNumberish
+    tickUpper: BigNumberish
+    amount0Min: BigNumberish
+    amount1Min: BigNumberish
+    recipient: AddressLike
+  }
 
   export type MintParamsStructOutput = [
     token0: string,
@@ -161,622 +161,341 @@ export declare namespace IApproveAndCall {
     amount1Min: bigint,
     recipient: string,
   ] & {
-    token0: string;
-    token1: string;
-    fee: bigint;
-    tickLower: bigint;
-    tickUpper: bigint;
-    amount0Min: bigint;
-    amount1Min: bigint;
-    recipient: string;
-  };
+    token0: string
+    token1: string
+    fee: bigint
+    tickLower: bigint
+    tickUpper: bigint
+    amount0Min: bigint
+    amount1Min: bigint
+    recipient: string
+  }
 }
 
 export interface SmartRouterInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "WETH9"
-      | "approveMax"
-      | "approveMaxMinusOne"
-      | "approveZeroThenMax"
-      | "approveZeroThenMaxMinusOne"
-      | "callPositionManager"
-      | "checkOracleSlippage(bytes[],uint128[],uint24,uint32)"
-      | "checkOracleSlippage(bytes,uint24,uint32)"
-      | "deployer"
-      | "exactInput"
-      | "exactInputSingle"
-      | "exactOutput"
-      | "exactOutputSingle"
-      | "factory"
-      | "factoryV2"
-      | "getApprovalType"
-      | "increaseLiquidity"
-      | "mint"
-      | "multicall(bytes32,bytes[])"
-      | "multicall(uint256,bytes[])"
-      | "multicall(bytes[])"
-      | "positionManager"
-      | "pull"
-      | "refundETH"
-      | "selfPermit"
-      | "selfPermitAllowed"
-      | "selfPermitAllowedIfNecessary"
-      | "selfPermitIfNecessary"
-      | "swapExactTokensForTokens"
-      | "swapTokensForExactTokens"
-      | "sweepToken(address,uint256,address)"
-      | "sweepToken(address,uint256)"
-      | "sweepTokenWithFee(address,uint256,uint256,address)"
-      | "sweepTokenWithFee(address,uint256,address,uint256,address)"
-      | "unwrapWETH9"
-      | "unwrapWETH9WithFee(uint256,address,uint256,address)"
-      | "unwrapWETH9WithFee(uint256,uint256,address)"
-      | "vvsV3SwapCallback"
-      | "wrapETH",
-  ): FunctionFragment;
+      | 'WETH9'
+      | 'approveMax'
+      | 'approveMaxMinusOne'
+      | 'approveZeroThenMax'
+      | 'approveZeroThenMaxMinusOne'
+      | 'callPositionManager'
+      | 'checkOracleSlippage(bytes[],uint128[],uint24,uint32)'
+      | 'checkOracleSlippage(bytes,uint24,uint32)'
+      | 'deployer'
+      | 'exactInput'
+      | 'exactInputSingle'
+      | 'exactOutput'
+      | 'exactOutputSingle'
+      | 'factory'
+      | 'factoryV2'
+      | 'getApprovalType'
+      | 'increaseLiquidity'
+      | 'mint'
+      | 'multicall(bytes32,bytes[])'
+      | 'multicall(uint256,bytes[])'
+      | 'multicall(bytes[])'
+      | 'positionManager'
+      | 'pull'
+      | 'refundETH'
+      | 'selfPermit'
+      | 'selfPermitAllowed'
+      | 'selfPermitAllowedIfNecessary'
+      | 'selfPermitIfNecessary'
+      | 'swapExactTokensForTokens'
+      | 'swapTokensForExactTokens'
+      | 'sweepToken(address,uint256,address)'
+      | 'sweepToken(address,uint256)'
+      | 'sweepTokenWithFee(address,uint256,uint256,address)'
+      | 'sweepTokenWithFee(address,uint256,address,uint256,address)'
+      | 'unwrapWETH9'
+      | 'unwrapWETH9WithFee(uint256,address,uint256,address)'
+      | 'unwrapWETH9WithFee(uint256,uint256,address)'
+      | 'vvsV3SwapCallback'
+      | 'wrapETH',
+  ): FunctionFragment
 
-  encodeFunctionData(functionFragment: "WETH9", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'WETH9', values?: undefined): string
+  encodeFunctionData(functionFragment: 'approveMax', values: [AddressLike]): string
+  encodeFunctionData(functionFragment: 'approveMaxMinusOne', values: [AddressLike]): string
+  encodeFunctionData(functionFragment: 'approveZeroThenMax', values: [AddressLike]): string
+  encodeFunctionData(functionFragment: 'approveZeroThenMaxMinusOne', values: [AddressLike]): string
+  encodeFunctionData(functionFragment: 'callPositionManager', values: [BytesLike]): string
   encodeFunctionData(
-    functionFragment: "approveMax",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "approveMaxMinusOne",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "approveZeroThenMax",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "approveZeroThenMaxMinusOne",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "callPositionManager",
-    values: [BytesLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "checkOracleSlippage(bytes[],uint128[],uint24,uint32)",
+    functionFragment: 'checkOracleSlippage(bytes[],uint128[],uint24,uint32)',
     values: [BytesLike[], BigNumberish[], BigNumberish, BigNumberish],
-  ): string;
+  ): string
   encodeFunctionData(
-    functionFragment: "checkOracleSlippage(bytes,uint24,uint32)",
+    functionFragment: 'checkOracleSlippage(bytes,uint24,uint32)',
     values: [BytesLike, BigNumberish, BigNumberish],
-  ): string;
-  encodeFunctionData(functionFragment: "deployer", values?: undefined): string;
+  ): string
+  encodeFunctionData(functionFragment: 'deployer', values?: undefined): string
+  encodeFunctionData(functionFragment: 'exactInput', values: [IV3SwapRouter.ExactInputParamsStruct]): string
+  encodeFunctionData(functionFragment: 'exactInputSingle', values: [IV3SwapRouter.ExactInputSingleParamsStruct]): string
+  encodeFunctionData(functionFragment: 'exactOutput', values: [IV3SwapRouter.ExactOutputParamsStruct]): string
   encodeFunctionData(
-    functionFragment: "exactInput",
-    values: [IV3SwapRouter.ExactInputParamsStruct],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "exactInputSingle",
-    values: [IV3SwapRouter.ExactInputSingleParamsStruct],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "exactOutput",
-    values: [IV3SwapRouter.ExactOutputParamsStruct],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "exactOutputSingle",
+    functionFragment: 'exactOutputSingle',
     values: [IV3SwapRouter.ExactOutputSingleParamsStruct],
-  ): string;
-  encodeFunctionData(functionFragment: "factory", values?: undefined): string;
-  encodeFunctionData(functionFragment: "factoryV2", values?: undefined): string;
+  ): string
+  encodeFunctionData(functionFragment: 'factory', values?: undefined): string
+  encodeFunctionData(functionFragment: 'factoryV2', values?: undefined): string
+  encodeFunctionData(functionFragment: 'getApprovalType', values: [AddressLike, BigNumberish]): string
   encodeFunctionData(
-    functionFragment: "getApprovalType",
-    values: [AddressLike, BigNumberish],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "increaseLiquidity",
+    functionFragment: 'increaseLiquidity',
     values: [IApproveAndCall.IncreaseLiquidityParamsStruct],
-  ): string;
+  ): string
+  encodeFunctionData(functionFragment: 'mint', values: [IApproveAndCall.MintParamsStruct]): string
+  encodeFunctionData(functionFragment: 'multicall(bytes32,bytes[])', values: [BytesLike, BytesLike[]]): string
+  encodeFunctionData(functionFragment: 'multicall(uint256,bytes[])', values: [BigNumberish, BytesLike[]]): string
+  encodeFunctionData(functionFragment: 'multicall(bytes[])', values: [BytesLike[]]): string
+  encodeFunctionData(functionFragment: 'positionManager', values?: undefined): string
+  encodeFunctionData(functionFragment: 'pull', values: [AddressLike, BigNumberish]): string
+  encodeFunctionData(functionFragment: 'refundETH', values?: undefined): string
   encodeFunctionData(
-    functionFragment: "mint",
-    values: [IApproveAndCall.MintParamsStruct],
-  ): string;
+    functionFragment: 'selfPermit',
+    values: [AddressLike, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike],
+  ): string
   encodeFunctionData(
-    functionFragment: "multicall(bytes32,bytes[])",
-    values: [BytesLike, BytesLike[]],
-  ): string;
+    functionFragment: 'selfPermitAllowed',
+    values: [AddressLike, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike],
+  ): string
   encodeFunctionData(
-    functionFragment: "multicall(uint256,bytes[])",
-    values: [BigNumberish, BytesLike[]],
-  ): string;
+    functionFragment: 'selfPermitAllowedIfNecessary',
+    values: [AddressLike, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike],
+  ): string
   encodeFunctionData(
-    functionFragment: "multicall(bytes[])",
-    values: [BytesLike[]],
-  ): string;
+    functionFragment: 'selfPermitIfNecessary',
+    values: [AddressLike, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike],
+  ): string
   encodeFunctionData(
-    functionFragment: "positionManager",
-    values?: undefined,
-  ): string;
-  encodeFunctionData(
-    functionFragment: "pull",
-    values: [AddressLike, BigNumberish],
-  ): string;
-  encodeFunctionData(functionFragment: "refundETH", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "selfPermit",
-    values: [
-      AddressLike,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BytesLike,
-      BytesLike,
-    ],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "selfPermitAllowed",
-    values: [
-      AddressLike,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BytesLike,
-      BytesLike,
-    ],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "selfPermitAllowedIfNecessary",
-    values: [
-      AddressLike,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BytesLike,
-      BytesLike,
-    ],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "selfPermitIfNecessary",
-    values: [
-      AddressLike,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BytesLike,
-      BytesLike,
-    ],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "swapExactTokensForTokens",
+    functionFragment: 'swapExactTokensForTokens',
     values: [BigNumberish, BigNumberish, AddressLike[], AddressLike],
-  ): string;
+  ): string
   encodeFunctionData(
-    functionFragment: "swapTokensForExactTokens",
+    functionFragment: 'swapTokensForExactTokens',
     values: [BigNumberish, BigNumberish, AddressLike[], AddressLike],
-  ): string;
+  ): string
   encodeFunctionData(
-    functionFragment: "sweepToken(address,uint256,address)",
+    functionFragment: 'sweepToken(address,uint256,address)',
     values: [AddressLike, BigNumberish, AddressLike],
-  ): string;
+  ): string
+  encodeFunctionData(functionFragment: 'sweepToken(address,uint256)', values: [AddressLike, BigNumberish]): string
   encodeFunctionData(
-    functionFragment: "sweepToken(address,uint256)",
-    values: [AddressLike, BigNumberish],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "sweepTokenWithFee(address,uint256,uint256,address)",
+    functionFragment: 'sweepTokenWithFee(address,uint256,uint256,address)',
     values: [AddressLike, BigNumberish, BigNumberish, AddressLike],
-  ): string;
+  ): string
   encodeFunctionData(
-    functionFragment: "sweepTokenWithFee(address,uint256,address,uint256,address)",
+    functionFragment: 'sweepTokenWithFee(address,uint256,address,uint256,address)',
     values: [AddressLike, BigNumberish, AddressLike, BigNumberish, AddressLike],
-  ): string;
+  ): string
+  encodeFunctionData(functionFragment: 'unwrapWETH9', values: [BigNumberish, AddressLike]): string
   encodeFunctionData(
-    functionFragment: "unwrapWETH9",
-    values: [BigNumberish, AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "unwrapWETH9WithFee(uint256,address,uint256,address)",
+    functionFragment: 'unwrapWETH9WithFee(uint256,address,uint256,address)',
     values: [BigNumberish, AddressLike, BigNumberish, AddressLike],
-  ): string;
+  ): string
   encodeFunctionData(
-    functionFragment: "unwrapWETH9WithFee(uint256,uint256,address)",
+    functionFragment: 'unwrapWETH9WithFee(uint256,uint256,address)',
     values: [BigNumberish, BigNumberish, AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "vvsV3SwapCallback",
-    values: [BigNumberish, BigNumberish, BytesLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "wrapETH",
-    values: [BigNumberish],
-  ): string;
+  ): string
+  encodeFunctionData(functionFragment: 'vvsV3SwapCallback', values: [BigNumberish, BigNumberish, BytesLike]): string
+  encodeFunctionData(functionFragment: 'wrapETH', values: [BigNumberish]): string
 
-  decodeFunctionResult(functionFragment: "WETH9", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "approveMax", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'WETH9', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'approveMax', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'approveMaxMinusOne', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'approveZeroThenMax', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'approveZeroThenMaxMinusOne', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'callPositionManager', data: BytesLike): Result
   decodeFunctionResult(
-    functionFragment: "approveMaxMinusOne",
+    functionFragment: 'checkOracleSlippage(bytes[],uint128[],uint24,uint32)',
     data: BytesLike,
-  ): Result;
+  ): Result
+  decodeFunctionResult(functionFragment: 'checkOracleSlippage(bytes,uint24,uint32)', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'deployer', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'exactInput', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'exactInputSingle', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'exactOutput', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'exactOutputSingle', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'factory', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'factoryV2', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'getApprovalType', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'increaseLiquidity', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'mint', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'multicall(bytes32,bytes[])', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'multicall(uint256,bytes[])', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'multicall(bytes[])', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'positionManager', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'pull', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'refundETH', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'selfPermit', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'selfPermitAllowed', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'selfPermitAllowedIfNecessary', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'selfPermitIfNecessary', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'swapExactTokensForTokens', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'swapTokensForExactTokens', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'sweepToken(address,uint256,address)', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'sweepToken(address,uint256)', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'sweepTokenWithFee(address,uint256,uint256,address)', data: BytesLike): Result
   decodeFunctionResult(
-    functionFragment: "approveZeroThenMax",
+    functionFragment: 'sweepTokenWithFee(address,uint256,address,uint256,address)',
     data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "approveZeroThenMaxMinusOne",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "callPositionManager",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "checkOracleSlippage(bytes[],uint128[],uint24,uint32)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "checkOracleSlippage(bytes,uint24,uint32)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "exactInput", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "exactInputSingle",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "exactOutput",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "exactOutputSingle",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(functionFragment: "factory", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "factoryV2", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getApprovalType",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "increaseLiquidity",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "multicall(bytes32,bytes[])",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "multicall(uint256,bytes[])",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "multicall(bytes[])",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "positionManager",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(functionFragment: "pull", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "refundETH", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "selfPermit", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "selfPermitAllowed",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "selfPermitAllowedIfNecessary",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "selfPermitIfNecessary",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "swapExactTokensForTokens",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "swapTokensForExactTokens",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "sweepToken(address,uint256,address)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "sweepToken(address,uint256)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "sweepTokenWithFee(address,uint256,uint256,address)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "sweepTokenWithFee(address,uint256,address,uint256,address)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "unwrapWETH9",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "unwrapWETH9WithFee(uint256,address,uint256,address)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "unwrapWETH9WithFee(uint256,uint256,address)",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "vvsV3SwapCallback",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(functionFragment: "wrapETH", data: BytesLike): Result;
+  ): Result
+  decodeFunctionResult(functionFragment: 'unwrapWETH9', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'unwrapWETH9WithFee(uint256,address,uint256,address)', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'unwrapWETH9WithFee(uint256,uint256,address)', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'vvsV3SwapCallback', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'wrapETH', data: BytesLike): Result
 }
 
 export interface SmartRouter extends BaseContract {
-  connect(runner?: ContractRunner | null): SmartRouter;
-  waitForDeployment(): Promise<this>;
+  connect(runner?: ContractRunner | null): SmartRouter
+  waitForDeployment(): Promise<this>
 
-  interface: SmartRouterInterface;
+  interface: SmartRouterInterface
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined,
-  ): Promise<Array<TypedEventLog<TCEvent>>>;
+  ): Promise<Array<TypedEventLog<TCEvent>>>
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined,
-  ): Promise<Array<TypedEventLog<TCEvent>>>;
+  ): Promise<Array<TypedEventLog<TCEvent>>>
 
-  on<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
-    listener: TypedListener<TCEvent>,
-  ): Promise<this>;
+  on<TCEvent extends TypedContractEvent>(event: TCEvent, listener: TypedListener<TCEvent>): Promise<this>
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     listener: TypedListener<TCEvent>,
-  ): Promise<this>;
+  ): Promise<this>
 
-  once<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
-    listener: TypedListener<TCEvent>,
-  ): Promise<this>;
+  once<TCEvent extends TypedContractEvent>(event: TCEvent, listener: TypedListener<TCEvent>): Promise<this>
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     listener: TypedListener<TCEvent>,
-  ): Promise<this>;
+  ): Promise<this>
 
-  listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
-  ): Promise<Array<TypedListener<TCEvent>>>;
-  listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent,
-  ): Promise<this>;
+  listeners<TCEvent extends TypedContractEvent>(event: TCEvent): Promise<Array<TypedListener<TCEvent>>>
+  listeners(eventName?: string): Promise<Array<Listener>>
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>
 
-  WETH9: TypedContractMethod<[], [string], "view">;
+  WETH9: TypedContractMethod<[], [string], 'view'>
 
-  approveMax: TypedContractMethod<[token: AddressLike], [void], "payable">;
+  approveMax: TypedContractMethod<[token: AddressLike], [void], 'payable'>
 
-  approveMaxMinusOne: TypedContractMethod<
-    [token: AddressLike],
+  approveMaxMinusOne: TypedContractMethod<[token: AddressLike], [void], 'payable'>
+
+  approveZeroThenMax: TypedContractMethod<[token: AddressLike], [void], 'payable'>
+
+  approveZeroThenMaxMinusOne: TypedContractMethod<[token: AddressLike], [void], 'payable'>
+
+  callPositionManager: TypedContractMethod<[data: BytesLike], [string], 'payable'>
+
+  'checkOracleSlippage(bytes[],uint128[],uint24,uint32)': TypedContractMethod<
+    [paths: BytesLike[], amounts: BigNumberish[], maximumTickDivergence: BigNumberish, secondsAgo: BigNumberish],
     [void],
-    "payable"
-  >;
+    'view'
+  >
 
-  approveZeroThenMax: TypedContractMethod<
-    [token: AddressLike],
+  'checkOracleSlippage(bytes,uint24,uint32)': TypedContractMethod<
+    [path: BytesLike, maximumTickDivergence: BigNumberish, secondsAgo: BigNumberish],
     [void],
-    "payable"
-  >;
+    'view'
+  >
 
-  approveZeroThenMaxMinusOne: TypedContractMethod<
-    [token: AddressLike],
-    [void],
-    "payable"
-  >;
+  deployer: TypedContractMethod<[], [string], 'view'>
 
-  callPositionManager: TypedContractMethod<
-    [data: BytesLike],
-    [string],
-    "payable"
-  >;
+  exactInput: TypedContractMethod<[params: IV3SwapRouter.ExactInputParamsStruct], [bigint], 'payable'>
 
-  "checkOracleSlippage(bytes[],uint128[],uint24,uint32)": TypedContractMethod<
-    [
-      paths: BytesLike[],
-      amounts: BigNumberish[],
-      maximumTickDivergence: BigNumberish,
-      secondsAgo: BigNumberish,
-    ],
-    [void],
-    "view"
-  >;
+  exactInputSingle: TypedContractMethod<[params: IV3SwapRouter.ExactInputSingleParamsStruct], [bigint], 'payable'>
 
-  "checkOracleSlippage(bytes,uint24,uint32)": TypedContractMethod<
-    [
-      path: BytesLike,
-      maximumTickDivergence: BigNumberish,
-      secondsAgo: BigNumberish,
-    ],
-    [void],
-    "view"
-  >;
+  exactOutput: TypedContractMethod<[params: IV3SwapRouter.ExactOutputParamsStruct], [bigint], 'payable'>
 
-  deployer: TypedContractMethod<[], [string], "view">;
+  exactOutputSingle: TypedContractMethod<[params: IV3SwapRouter.ExactOutputSingleParamsStruct], [bigint], 'payable'>
 
-  exactInput: TypedContractMethod<
-    [params: IV3SwapRouter.ExactInputParamsStruct],
-    [bigint],
-    "payable"
-  >;
+  factory: TypedContractMethod<[], [string], 'view'>
 
-  exactInputSingle: TypedContractMethod<
-    [params: IV3SwapRouter.ExactInputSingleParamsStruct],
-    [bigint],
-    "payable"
-  >;
+  factoryV2: TypedContractMethod<[], [string], 'view'>
 
-  exactOutput: TypedContractMethod<
-    [params: IV3SwapRouter.ExactOutputParamsStruct],
-    [bigint],
-    "payable"
-  >;
+  getApprovalType: TypedContractMethod<[token: AddressLike, amount: BigNumberish], [bigint], 'nonpayable'>
 
-  exactOutputSingle: TypedContractMethod<
-    [params: IV3SwapRouter.ExactOutputSingleParamsStruct],
-    [bigint],
-    "payable"
-  >;
+  increaseLiquidity: TypedContractMethod<[params: IApproveAndCall.IncreaseLiquidityParamsStruct], [string], 'payable'>
 
-  factory: TypedContractMethod<[], [string], "view">;
+  mint: TypedContractMethod<[params: IApproveAndCall.MintParamsStruct], [string], 'payable'>
 
-  factoryV2: TypedContractMethod<[], [string], "view">;
-
-  getApprovalType: TypedContractMethod<
-    [token: AddressLike, amount: BigNumberish],
-    [bigint],
-    "nonpayable"
-  >;
-
-  increaseLiquidity: TypedContractMethod<
-    [params: IApproveAndCall.IncreaseLiquidityParamsStruct],
-    [string],
-    "payable"
-  >;
-
-  mint: TypedContractMethod<
-    [params: IApproveAndCall.MintParamsStruct],
-    [string],
-    "payable"
-  >;
-
-  "multicall(bytes32,bytes[])": TypedContractMethod<
+  'multicall(bytes32,bytes[])': TypedContractMethod<
     [previousBlockhash: BytesLike, data: BytesLike[]],
     [string[]],
-    "payable"
-  >;
+    'payable'
+  >
 
-  "multicall(uint256,bytes[])": TypedContractMethod<
-    [deadline: BigNumberish, data: BytesLike[]],
-    [string[]],
-    "payable"
-  >;
+  'multicall(uint256,bytes[])': TypedContractMethod<[deadline: BigNumberish, data: BytesLike[]], [string[]], 'payable'>
 
-  "multicall(bytes[])": TypedContractMethod<
-    [data: BytesLike[]],
-    [string[]],
-    "payable"
-  >;
+  'multicall(bytes[])': TypedContractMethod<[data: BytesLike[]], [string[]], 'payable'>
 
-  positionManager: TypedContractMethod<[], [string], "view">;
+  positionManager: TypedContractMethod<[], [string], 'view'>
 
-  pull: TypedContractMethod<
-    [token: AddressLike, value: BigNumberish],
-    [void],
-    "payable"
-  >;
+  pull: TypedContractMethod<[token: AddressLike, value: BigNumberish], [void], 'payable'>
 
-  refundETH: TypedContractMethod<[], [void], "payable">;
+  refundETH: TypedContractMethod<[], [void], 'payable'>
 
   selfPermit: TypedContractMethod<
-    [
-      token: AddressLike,
-      value: BigNumberish,
-      deadline: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
+    [token: AddressLike, value: BigNumberish, deadline: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
   selfPermitAllowed: TypedContractMethod<
-    [
-      token: AddressLike,
-      nonce: BigNumberish,
-      expiry: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
+    [token: AddressLike, nonce: BigNumberish, expiry: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
   selfPermitAllowedIfNecessary: TypedContractMethod<
-    [
-      token: AddressLike,
-      nonce: BigNumberish,
-      expiry: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
+    [token: AddressLike, nonce: BigNumberish, expiry: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
   selfPermitIfNecessary: TypedContractMethod<
-    [
-      token: AddressLike,
-      value: BigNumberish,
-      deadline: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
+    [token: AddressLike, value: BigNumberish, deadline: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
   swapExactTokensForTokens: TypedContractMethod<
-    [
-      amountIn: BigNumberish,
-      amountOutMin: BigNumberish,
-      path: AddressLike[],
-      to: AddressLike,
-    ],
+    [amountIn: BigNumberish, amountOutMin: BigNumberish, path: AddressLike[], to: AddressLike],
     [bigint],
-    "payable"
-  >;
+    'payable'
+  >
 
   swapTokensForExactTokens: TypedContractMethod<
-    [
-      amountOut: BigNumberish,
-      amountInMax: BigNumberish,
-      path: AddressLike[],
-      to: AddressLike,
-    ],
+    [amountOut: BigNumberish, amountInMax: BigNumberish, path: AddressLike[], to: AddressLike],
     [bigint],
-    "payable"
-  >;
+    'payable'
+  >
 
-  "sweepToken(address,uint256,address)": TypedContractMethod<
+  'sweepToken(address,uint256,address)': TypedContractMethod<
     [token: AddressLike, amountMinimum: BigNumberish, recipient: AddressLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
-  "sweepToken(address,uint256)": TypedContractMethod<
+  'sweepToken(address,uint256)': TypedContractMethod<
     [token: AddressLike, amountMinimum: BigNumberish],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
-  "sweepTokenWithFee(address,uint256,uint256,address)": TypedContractMethod<
-    [
-      token: AddressLike,
-      amountMinimum: BigNumberish,
-      feeBips: BigNumberish,
-      feeRecipient: AddressLike,
-    ],
+  'sweepTokenWithFee(address,uint256,uint256,address)': TypedContractMethod<
+    [token: AddressLike, amountMinimum: BigNumberish, feeBips: BigNumberish, feeRecipient: AddressLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
-  "sweepTokenWithFee(address,uint256,address,uint256,address)": TypedContractMethod<
+  'sweepTokenWithFee(address,uint256,address,uint256,address)': TypedContractMethod<
     [
       token: AddressLike,
       amountMinimum: BigNumberish,
@@ -785,285 +504,148 @@ export interface SmartRouter extends BaseContract {
       feeRecipient: AddressLike,
     ],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
-  unwrapWETH9: TypedContractMethod<
-    [amountMinimum: BigNumberish, recipient: AddressLike],
-    [void],
-    "payable"
-  >;
+  unwrapWETH9: TypedContractMethod<[amountMinimum: BigNumberish, recipient: AddressLike], [void], 'payable'>
 
-  "unwrapWETH9WithFee(uint256,address,uint256,address)": TypedContractMethod<
-    [
-      amountMinimum: BigNumberish,
-      recipient: AddressLike,
-      feeBips: BigNumberish,
-      feeRecipient: AddressLike,
-    ],
+  'unwrapWETH9WithFee(uint256,address,uint256,address)': TypedContractMethod<
+    [amountMinimum: BigNumberish, recipient: AddressLike, feeBips: BigNumberish, feeRecipient: AddressLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
-  "unwrapWETH9WithFee(uint256,uint256,address)": TypedContractMethod<
-    [
-      amountMinimum: BigNumberish,
-      feeBips: BigNumberish,
-      feeRecipient: AddressLike,
-    ],
+  'unwrapWETH9WithFee(uint256,uint256,address)': TypedContractMethod<
+    [amountMinimum: BigNumberish, feeBips: BigNumberish, feeRecipient: AddressLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
 
   vvsV3SwapCallback: TypedContractMethod<
     [amount0Delta: BigNumberish, amount1Delta: BigNumberish, _data: BytesLike],
     [void],
-    "nonpayable"
-  >;
+    'nonpayable'
+  >
 
-  wrapETH: TypedContractMethod<[value: BigNumberish], [void], "payable">;
+  wrapETH: TypedContractMethod<[value: BigNumberish], [void], 'payable'>
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment,
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T
 
+  getFunction(nameOrSignature: 'WETH9'): TypedContractMethod<[], [string], 'view'>
+  getFunction(nameOrSignature: 'approveMax'): TypedContractMethod<[token: AddressLike], [void], 'payable'>
+  getFunction(nameOrSignature: 'approveMaxMinusOne'): TypedContractMethod<[token: AddressLike], [void], 'payable'>
+  getFunction(nameOrSignature: 'approveZeroThenMax'): TypedContractMethod<[token: AddressLike], [void], 'payable'>
   getFunction(
-    nameOrSignature: "WETH9",
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'approveZeroThenMaxMinusOne',
+  ): TypedContractMethod<[token: AddressLike], [void], 'payable'>
+  getFunction(nameOrSignature: 'callPositionManager'): TypedContractMethod<[data: BytesLike], [string], 'payable'>
   getFunction(
-    nameOrSignature: "approveMax",
-  ): TypedContractMethod<[token: AddressLike], [void], "payable">;
-  getFunction(
-    nameOrSignature: "approveMaxMinusOne",
-  ): TypedContractMethod<[token: AddressLike], [void], "payable">;
-  getFunction(
-    nameOrSignature: "approveZeroThenMax",
-  ): TypedContractMethod<[token: AddressLike], [void], "payable">;
-  getFunction(
-    nameOrSignature: "approveZeroThenMaxMinusOne",
-  ): TypedContractMethod<[token: AddressLike], [void], "payable">;
-  getFunction(
-    nameOrSignature: "callPositionManager",
-  ): TypedContractMethod<[data: BytesLike], [string], "payable">;
-  getFunction(
-    nameOrSignature: "checkOracleSlippage(bytes[],uint128[],uint24,uint32)",
+    nameOrSignature: 'checkOracleSlippage(bytes[],uint128[],uint24,uint32)',
   ): TypedContractMethod<
-    [
-      paths: BytesLike[],
-      amounts: BigNumberish[],
-      maximumTickDivergence: BigNumberish,
-      secondsAgo: BigNumberish,
-    ],
+    [paths: BytesLike[], amounts: BigNumberish[], maximumTickDivergence: BigNumberish, secondsAgo: BigNumberish],
     [void],
-    "view"
-  >;
+    'view'
+  >
   getFunction(
-    nameOrSignature: "checkOracleSlippage(bytes,uint24,uint32)",
+    nameOrSignature: 'checkOracleSlippage(bytes,uint24,uint32)',
   ): TypedContractMethod<
-    [
-      path: BytesLike,
-      maximumTickDivergence: BigNumberish,
-      secondsAgo: BigNumberish,
-    ],
+    [path: BytesLike, maximumTickDivergence: BigNumberish, secondsAgo: BigNumberish],
     [void],
-    "view"
-  >;
+    'view'
+  >
+  getFunction(nameOrSignature: 'deployer'): TypedContractMethod<[], [string], 'view'>
   getFunction(
-    nameOrSignature: "deployer",
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'exactInput',
+  ): TypedContractMethod<[params: IV3SwapRouter.ExactInputParamsStruct], [bigint], 'payable'>
   getFunction(
-    nameOrSignature: "exactInput",
+    nameOrSignature: 'exactInputSingle',
+  ): TypedContractMethod<[params: IV3SwapRouter.ExactInputSingleParamsStruct], [bigint], 'payable'>
+  getFunction(
+    nameOrSignature: 'exactOutput',
+  ): TypedContractMethod<[params: IV3SwapRouter.ExactOutputParamsStruct], [bigint], 'payable'>
+  getFunction(
+    nameOrSignature: 'exactOutputSingle',
+  ): TypedContractMethod<[params: IV3SwapRouter.ExactOutputSingleParamsStruct], [bigint], 'payable'>
+  getFunction(nameOrSignature: 'factory'): TypedContractMethod<[], [string], 'view'>
+  getFunction(nameOrSignature: 'factoryV2'): TypedContractMethod<[], [string], 'view'>
+  getFunction(
+    nameOrSignature: 'getApprovalType',
+  ): TypedContractMethod<[token: AddressLike, amount: BigNumberish], [bigint], 'nonpayable'>
+  getFunction(
+    nameOrSignature: 'increaseLiquidity',
+  ): TypedContractMethod<[params: IApproveAndCall.IncreaseLiquidityParamsStruct], [string], 'payable'>
+  getFunction(
+    nameOrSignature: 'mint',
+  ): TypedContractMethod<[params: IApproveAndCall.MintParamsStruct], [string], 'payable'>
+  getFunction(
+    nameOrSignature: 'multicall(bytes32,bytes[])',
+  ): TypedContractMethod<[previousBlockhash: BytesLike, data: BytesLike[]], [string[]], 'payable'>
+  getFunction(
+    nameOrSignature: 'multicall(uint256,bytes[])',
+  ): TypedContractMethod<[deadline: BigNumberish, data: BytesLike[]], [string[]], 'payable'>
+  getFunction(nameOrSignature: 'multicall(bytes[])'): TypedContractMethod<[data: BytesLike[]], [string[]], 'payable'>
+  getFunction(nameOrSignature: 'positionManager'): TypedContractMethod<[], [string], 'view'>
+  getFunction(
+    nameOrSignature: 'pull',
+  ): TypedContractMethod<[token: AddressLike, value: BigNumberish], [void], 'payable'>
+  getFunction(nameOrSignature: 'refundETH'): TypedContractMethod<[], [void], 'payable'>
+  getFunction(
+    nameOrSignature: 'selfPermit',
   ): TypedContractMethod<
-    [params: IV3SwapRouter.ExactInputParamsStruct],
+    [token: AddressLike, value: BigNumberish, deadline: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
+    [void],
+    'payable'
+  >
+  getFunction(
+    nameOrSignature: 'selfPermitAllowed',
+  ): TypedContractMethod<
+    [token: AddressLike, nonce: BigNumberish, expiry: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
+    [void],
+    'payable'
+  >
+  getFunction(
+    nameOrSignature: 'selfPermitAllowedIfNecessary',
+  ): TypedContractMethod<
+    [token: AddressLike, nonce: BigNumberish, expiry: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
+    [void],
+    'payable'
+  >
+  getFunction(
+    nameOrSignature: 'selfPermitIfNecessary',
+  ): TypedContractMethod<
+    [token: AddressLike, value: BigNumberish, deadline: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike],
+    [void],
+    'payable'
+  >
+  getFunction(
+    nameOrSignature: 'swapExactTokensForTokens',
+  ): TypedContractMethod<
+    [amountIn: BigNumberish, amountOutMin: BigNumberish, path: AddressLike[], to: AddressLike],
     [bigint],
-    "payable"
-  >;
+    'payable'
+  >
   getFunction(
-    nameOrSignature: "exactInputSingle",
+    nameOrSignature: 'swapTokensForExactTokens',
   ): TypedContractMethod<
-    [params: IV3SwapRouter.ExactInputSingleParamsStruct],
+    [amountOut: BigNumberish, amountInMax: BigNumberish, path: AddressLike[], to: AddressLike],
     [bigint],
-    "payable"
-  >;
+    'payable'
+  >
   getFunction(
-    nameOrSignature: "exactOutput",
+    nameOrSignature: 'sweepToken(address,uint256,address)',
+  ): TypedContractMethod<[token: AddressLike, amountMinimum: BigNumberish, recipient: AddressLike], [void], 'payable'>
+  getFunction(
+    nameOrSignature: 'sweepToken(address,uint256)',
+  ): TypedContractMethod<[token: AddressLike, amountMinimum: BigNumberish], [void], 'payable'>
+  getFunction(
+    nameOrSignature: 'sweepTokenWithFee(address,uint256,uint256,address)',
   ): TypedContractMethod<
-    [params: IV3SwapRouter.ExactOutputParamsStruct],
-    [bigint],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "exactOutputSingle",
-  ): TypedContractMethod<
-    [params: IV3SwapRouter.ExactOutputSingleParamsStruct],
-    [bigint],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "factory",
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "factoryV2",
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "getApprovalType",
-  ): TypedContractMethod<
-    [token: AddressLike, amount: BigNumberish],
-    [bigint],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "increaseLiquidity",
-  ): TypedContractMethod<
-    [params: IApproveAndCall.IncreaseLiquidityParamsStruct],
-    [string],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "mint",
-  ): TypedContractMethod<
-    [params: IApproveAndCall.MintParamsStruct],
-    [string],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "multicall(bytes32,bytes[])",
-  ): TypedContractMethod<
-    [previousBlockhash: BytesLike, data: BytesLike[]],
-    [string[]],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "multicall(uint256,bytes[])",
-  ): TypedContractMethod<
-    [deadline: BigNumberish, data: BytesLike[]],
-    [string[]],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "multicall(bytes[])",
-  ): TypedContractMethod<[data: BytesLike[]], [string[]], "payable">;
-  getFunction(
-    nameOrSignature: "positionManager",
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "pull",
-  ): TypedContractMethod<
-    [token: AddressLike, value: BigNumberish],
+    [token: AddressLike, amountMinimum: BigNumberish, feeBips: BigNumberish, feeRecipient: AddressLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
   getFunction(
-    nameOrSignature: "refundETH",
-  ): TypedContractMethod<[], [void], "payable">;
-  getFunction(
-    nameOrSignature: "selfPermit",
-  ): TypedContractMethod<
-    [
-      token: AddressLike,
-      value: BigNumberish,
-      deadline: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "selfPermitAllowed",
-  ): TypedContractMethod<
-    [
-      token: AddressLike,
-      nonce: BigNumberish,
-      expiry: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "selfPermitAllowedIfNecessary",
-  ): TypedContractMethod<
-    [
-      token: AddressLike,
-      nonce: BigNumberish,
-      expiry: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "selfPermitIfNecessary",
-  ): TypedContractMethod<
-    [
-      token: AddressLike,
-      value: BigNumberish,
-      deadline: BigNumberish,
-      v: BigNumberish,
-      r: BytesLike,
-      s: BytesLike,
-    ],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "swapExactTokensForTokens",
-  ): TypedContractMethod<
-    [
-      amountIn: BigNumberish,
-      amountOutMin: BigNumberish,
-      path: AddressLike[],
-      to: AddressLike,
-    ],
-    [bigint],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "swapTokensForExactTokens",
-  ): TypedContractMethod<
-    [
-      amountOut: BigNumberish,
-      amountInMax: BigNumberish,
-      path: AddressLike[],
-      to: AddressLike,
-    ],
-    [bigint],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "sweepToken(address,uint256,address)",
-  ): TypedContractMethod<
-    [token: AddressLike, amountMinimum: BigNumberish, recipient: AddressLike],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "sweepToken(address,uint256)",
-  ): TypedContractMethod<
-    [token: AddressLike, amountMinimum: BigNumberish],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "sweepTokenWithFee(address,uint256,uint256,address)",
-  ): TypedContractMethod<
-    [
-      token: AddressLike,
-      amountMinimum: BigNumberish,
-      feeBips: BigNumberish,
-      feeRecipient: AddressLike,
-    ],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "sweepTokenWithFee(address,uint256,address,uint256,address)",
+    nameOrSignature: 'sweepTokenWithFee(address,uint256,address,uint256,address)',
   ): TypedContractMethod<
     [
       token: AddressLike,
@@ -1073,48 +655,33 @@ export interface SmartRouter extends BaseContract {
       feeRecipient: AddressLike,
     ],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
   getFunction(
-    nameOrSignature: "unwrapWETH9",
+    nameOrSignature: 'unwrapWETH9',
+  ): TypedContractMethod<[amountMinimum: BigNumberish, recipient: AddressLike], [void], 'payable'>
+  getFunction(
+    nameOrSignature: 'unwrapWETH9WithFee(uint256,address,uint256,address)',
   ): TypedContractMethod<
-    [amountMinimum: BigNumberish, recipient: AddressLike],
+    [amountMinimum: BigNumberish, recipient: AddressLike, feeBips: BigNumberish, feeRecipient: AddressLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
   getFunction(
-    nameOrSignature: "unwrapWETH9WithFee(uint256,address,uint256,address)",
+    nameOrSignature: 'unwrapWETH9WithFee(uint256,uint256,address)',
   ): TypedContractMethod<
-    [
-      amountMinimum: BigNumberish,
-      recipient: AddressLike,
-      feeBips: BigNumberish,
-      feeRecipient: AddressLike,
-    ],
+    [amountMinimum: BigNumberish, feeBips: BigNumberish, feeRecipient: AddressLike],
     [void],
-    "payable"
-  >;
+    'payable'
+  >
   getFunction(
-    nameOrSignature: "unwrapWETH9WithFee(uint256,uint256,address)",
-  ): TypedContractMethod<
-    [
-      amountMinimum: BigNumberish,
-      feeBips: BigNumberish,
-      feeRecipient: AddressLike,
-    ],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "vvsV3SwapCallback",
+    nameOrSignature: 'vvsV3SwapCallback',
   ): TypedContractMethod<
     [amount0Delta: BigNumberish, amount1Delta: BigNumberish, _data: BytesLike],
     [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "wrapETH",
-  ): TypedContractMethod<[value: BigNumberish], [void], "payable">;
+    'nonpayable'
+  >
+  getFunction(nameOrSignature: 'wrapETH'): TypedContractMethod<[value: BigNumberish], [void], 'payable'>
 
-  filters: {};
+  filters: {}
 }

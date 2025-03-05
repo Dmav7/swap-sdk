@@ -1,0 +1,17 @@
+name: Attempt Build
+
+on: # run check when push to any branches, but not tags
+  push:
+    branches: [ '**' ]
+
+jobs:
+  attempt_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: ./.github/actions/setup
+
+    - run: pnpm build
+

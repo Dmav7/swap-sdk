@@ -1,49 +1,33 @@
-import { Fraction } from "bi-fraction";
+import { Fraction } from 'bi-fraction'
 
-import { LP_FEE_RATIOS } from "../config/poolTypes";
-import type {
-  BestAMMTradeOpts,
-  Slippage,
-  SupportedChainId,
-  TokenAmount,
-  Trade,
-  TradeRoute,
-} from "../types";
-import { mapRoutePath } from "../utils/mapReduceRoutePath";
-import { parsePool } from "./parsePoolData";
-import { parseAmount, tokenAmount } from "./parseTokenAmount";
-import type { TradeQuoteData } from "./types";
+import { LP_FEE_RATIOS } from '../config/poolTypes'
+import type { BestAMMTradeOpts, Slippage, BuiltInChainId, TokenAmount, Trade, TradeRoute } from '../types'
+import { mapRoutePath } from '../utils/mapReduceRoutePath'
+import { parsePool } from './parsePoolData'
+import { parseAmount, tokenAmount } from './parseTokenAmount'
+import type { TradeQuoteData } from './types'
 
 export function parseQuoteApiData(
-  chainId: SupportedChainId,
+  chainId: BuiltInChainId,
   quoteData: TradeQuoteData,
   isInputNativeToken: boolean,
   isOutputNativeToken: boolean,
   opts: BestAMMTradeOpts,
 ): Trade {
-  const tolerance = new Fraction(opts.slippageTolerance);
+  const tolerance = new Fraction(opts.slippageTolerance)
 
-  const amountIn = parseAmount(
-    quoteData.amountIn,
-    isInputNativeToken ? chainId : undefined,
-  );
-  const amountOut = parseAmount(
-    quoteData.amountOut,
-    isOutputNativeToken ? chainId : undefined,
-  );
+  const amountIn = parseAmount(quoteData.amountIn, isInputNativeToken ? chainId : undefined, opts.chainConfig)
+  const amountOut = parseAmount(quoteData.amountOut, isOutputNativeToken ? chainId : undefined, opts.chainConfig)
 
-  const routes = quoteData.routes.map((route) => parseRoute(route, opts));
+  const routes = quoteData.routes.map((route) => parseRoute(route, opts))
 
-  const price = new Fraction(amountOut.amount).div(amountIn.amount);
+  const price = new Fraction(amountOut.amount).div(amountIn.amount)
 
   const lpFeeRatio = routes.reduce((sum, r) => {
-    const remain = r.pool.reduce(
-      (acc, p) => acc.mul(new Fraction(1).sub(LP_FEE_RATIOS[p.version])),
-      new Fraction(1),
-    );
-    return sum.add(new Fraction(1).sub(remain).mul(r.percentage));
-  }, new Fraction(0));
-  const lpFee = tokenAmount(lpFeeRatio.mul(amountIn.amount), amountIn);
+    const remain = r.pool.reduce((acc, p) => acc.mul(new Fraction(1).sub(LP_FEE_RATIOS[p.version])), new Fraction(1))
+    return sum.add(new Fraction(1).sub(remain).mul(r.percentage))
+  }, new Fraction(0))
+  const lpFee = tokenAmount(lpFeeRatio.mul(amountIn.amount), amountIn)
 
   return {
     type: opts.tradeType,
@@ -58,17 +42,14 @@ export function parseQuoteApiData(
     lpFee,
 
     slippage: calcSlippage(amountIn, amountOut, tolerance, opts),
-  };
+  }
 }
 
-function parseRoute(
-  route: TradeQuoteData["routes"][0],
-  opts: BestAMMTradeOpts,
-): TradeRoute {
-  const slippageTolerance = new Fraction(opts.slippageTolerance);
-  const amountIn = parseAmount(route.amountIn);
-  const amountOut = parseAmount(route.amountOut);
-  const pool = route.pool.map((p) => parsePool(p));
+function parseRoute(route: TradeQuoteData['routes'][0], opts: BestAMMTradeOpts): TradeRoute {
+  const slippageTolerance = new Fraction(opts.slippageTolerance)
+  const amountIn = parseAmount(route.amountIn)
+  const amountOut = parseAmount(route.amountOut)
+  const pool = route.pool.map((p) => parsePool(p))
 
   return {
     amountIn,
@@ -86,7 +67,7 @@ function parseRoute(
       ...mapRoutePath({ amountIn, pool }, ({ tokenTo }) => tokenTo),
     ],
     slippage: calcSlippage(amountIn, amountOut, slippageTolerance, opts),
-  };
+  }
 }
 
 function calcSlippage(
@@ -95,21 +76,17 @@ function calcSlippage(
   tolerance: Fraction,
   opts: BestAMMTradeOpts,
 ): Slippage {
-  return opts.tradeType === "EXACT_INPUT"
+  return opts.tradeType === 'EXACT_INPUT'
     ? {
-        minimumReceived: tokenAmount(
-          new Fraction(1).add(tolerance).invert().mul(amountOut.amount),
-          amountOut,
-        ),
-        type: "minimumReceived",
+        maximumSold: null,
+        minimumReceived: tokenAmount(new Fraction(1).add(tolerance).invert().mul(amountOut.amount), amountOut),
+        type: 'minimumReceived',
         tolerance,
       }
     : {
-        maximumSold: tokenAmount(
-          new Fraction(1).add(tolerance).mul(amountIn.amount),
-          amountIn,
-        ),
-        type: "maximumSold",
+        minimumReceived: null,
+        maximumSold: tokenAmount(new Fraction(1).add(tolerance).mul(amountIn.amount), amountIn),
+        type: 'maximumSold',
         tolerance,
-      };
+      }
 }

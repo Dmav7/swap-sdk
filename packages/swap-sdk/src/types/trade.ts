@@ -1,6 +1,7 @@
-import type { Fraction } from "bi-fraction";
+import type { Fraction } from 'bi-fraction'
 
 import type {
+  ChainConfig,
   NativeOrTokenAmount,
   PoolType,
   TokenAmount,
@@ -8,95 +9,92 @@ import type {
   TradeType,
   V2PoolTypes,
   V3PoolTypes,
-} from "./base";
+} from './base'
 
 export interface Trade {
-  type: TradeType;
+  type: TradeType
 
-  amountIn: NativeOrTokenAmount;
-  amountOut: NativeOrTokenAmount;
+  amountIn: NativeOrTokenAmount
+  amountOut: NativeOrTokenAmount
 
-  routes: TradeRoute[];
+  routes: TradeRoute[]
 
   // gasEstimate: Fraction; // not implemented in quoteApi yet
 
-  price: Fraction;
+  price: Fraction
 
-  lpFeeRatio: Fraction; // trading fee ratio
-  lpFee: TokenAmount; // trading fee
-  slippage: Slippage;
+  lpFeeRatio: Fraction // trading fee ratio
+  lpFee: TokenAmount // trading fee
+  slippage: Slippage
 }
 
 export interface TradeRoute {
-  amountIn: TokenAmount;
-  amountOut: TokenAmount;
+  amountIn: TokenAmount
+  amountOut: TokenAmount
   // gasEstimate: Fraction; // not implemented in quoteApi yet
-  percentage: Fraction;
+  percentage: Fraction
 
-  pool: TradeRoutePool[];
+  pool: TradeRoutePool[]
 
-  path: TokenInfo[];
-  slippage: Slippage;
+  path: TokenInfo[]
+  slippage: Slippage
 }
 
 export interface BasePool {
-  token0: TokenInfo;
-  token1: TokenInfo;
-  address: string;
-  version: PoolType;
-  token0Price: Fraction;
-  token1Price: Fraction;
+  token0: TokenInfo
+  token1: TokenInfo
+  address: string
+  version: PoolType
+  token0Price: Fraction
+  token1Price: Fraction
 }
 export interface V2Pool extends BasePool {
-  version: V2PoolTypes;
-  reserve0: TokenAmount;
-  reserve1: TokenAmount;
+  version: V2PoolTypes
+  reserve0: TokenAmount
+  reserve1: TokenAmount
 }
 export interface V3Pool extends BasePool {
-  version: V3PoolTypes;
+  version: V3PoolTypes
   // fee: V3PoolTypes,
-  liquidity: bigint;
-  sqrtRatioX96: bigint;
-  tick: number;
+  liquidity: bigint
+  sqrtRatioX96: bigint
+  tick: number
   // token0ProtocolFee: number
   // token1ProtocolFee: number
 }
-export type TradeRoutePool = V2Pool | V3Pool;
+export type TradeRoutePool = V2Pool | V3Pool
 
-interface SlippageMinimumReceived {
-  minimumReceived: TokenAmount;
-  type: "minimumReceived";
-  tolerance: Fraction;
+export interface Slippage {
+  minimumReceived: TokenAmount | null
+  maximumSold: TokenAmount | null
+  tolerance: Fraction
+  type: 'maximumSold' | 'minimumReceived'
 }
-interface SlippageMaximumSold {
-  maximumSold: TokenAmount;
-  type: "maximumSold";
-  tolerance: Fraction;
-}
-export type Slippage = SlippageMinimumReceived | SlippageMaximumSold;
 
 /**
  * options for fetchBestTrade
  */
 export interface BestAMMTradeOpts {
-  tradeType: TradeType;
-  maxHops: number;
-  maxSplits: number;
-  poolTypes: PoolType[];
-  slippageTolerance: number;
-  quoteApiEndpoint?: string;
-  quoteApiClientId?: string;
+  tradeType: TradeType
+  maxHops: number
+  maxSplits: number
+  poolTypes: PoolType[]
+  slippageTolerance: number
+  chainConfig?: ChainConfig
+  quoteApiEndpoint?: string
+  quoteApiClientId?: string
+  quoteApiChainName?: string
 }
 
 export interface TradeExtraInfo {
-  lpFeeRatio: number; // trading fee ratio
-  lpFee: TokenAmount; // trading fee
-  priceImpact: number;
-  priceImpactExcludeLpFee: number; // price impact exclude trading fee
-  gasEstimate: string; // gas estimate in native token = gasEstimate * gasPrice
-  gasRefundMin: number;
-  gasRefundMax: number;
-  receivedMin: TokenAmount;
-  receivedMax: TokenAmount;
-  disableSwap: boolean;
+  lpFeeRatio: number // trading fee ratio
+  lpFee: TokenAmount // trading fee
+  priceImpact: number
+  priceImpactExcludeLpFee: number // price impact exclude trading fee
+  gasEstimate: string // gas estimate in native token = gasEstimate * gasPrice
+  gasRefundMin: number
+  gasRefundMax: number
+  receivedMin: TokenAmount
+  receivedMax: TokenAmount
+  disableSwap: boolean
 }

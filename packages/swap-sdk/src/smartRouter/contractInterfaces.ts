@@ -1,11 +1,13 @@
-import { Interface } from "ethers";
+import { Interface } from 'ethers'
 
-import { SmartRouter as SwapRouterABI } from "../abis";
-import type { SmartRouter } from "../types";
+import { SmartRouter as SwapRouterABI } from '../abis'
+import type { SmartRouter } from '../types'
 
-const SmartRouterInterface = new Interface(SwapRouterABI);
+const SmartRouterInterface = new Interface(SwapRouterABI)
 
-export const encodeSmartRouterFunctionData: SmartRouter["interface"]["encodeFunctionData"] =
-  (functionFragment, args) => {
-    return SmartRouterInterface.encodeFunctionData(functionFragment, args);
-  };
+export const encodeSmartRouterFunctionData: SmartRouter['interface']['encodeFunctionData'] = (
+  functionFragment,
+  args,
+) => {
+  return SmartRouterInterface.encodeFunctionData(functionFragment, args)
+}

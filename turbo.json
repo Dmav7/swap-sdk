@@ -2,29 +2,61 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "@vvs-finance/swap-sdk#dev:build": {
+      "cache": false,
+      "persistent": true
+    },
+    "@vvs-finance/swap-sdk#dev:tsc": {
+      "cache": false,
+      "persistent": true
+    },
+    "@vvs-finance/swap-widget#dev:build": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build"],
+      "cache": false,
+      "persistent": true
+    },
+    "@vvs-finance/swap-widget#dev:tsc": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build"],
+      "cache": false,
+      "persistent": true
+    },
+    "dev:widget": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build"],
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "ts-check": {},
+    "@vvs-finance/swap-widget#ts-check": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build"]
+    },
+    "docs#ts-check": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build", "@vvs-finance/swap-widget#build"]
+    },
+    "test": {},
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist", ".next/**", "!.next/cache/**"]
     },
-    "lint": {
-      "dependsOn": ["^lint"]
+    "@vvs-finance/swap-widget#build": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build"]
     },
-    "test": {
-      "dependsOn": ["^test"]
+    "@vvs-finance/swap-sdk#release-local": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "@vvs-finance/swap-sdk#release": {
+      "dependsOn": ["@vvs-finance/swap-sdk#build"]
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
+    "@vvs-finance/swap-widget#release-local": {
+      "dependsOn": ["@vvs-finance/swap-widget#build"]
     },
-    "release": {
-      "dependsOn": ["build"]
-    },
-    "release-local": {
-      "dependsOn": ["build"]
+    "@vvs-finance/swap-widget#release": {
+      "dependsOn": ["@vvs-finance/swap-widget#build"]
     }
   },
   "envMode": "loose",

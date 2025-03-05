@@ -1,46 +1,39 @@
-import type { Signer, TransactionRequest } from "ethers";
+import type { Signer, TransactionRequest } from 'ethers'
 
-import { getContractAddress } from "./config";
-import { encodeTrade } from "./smartRouter/encodeTrade";
-import type { EncodeArgs } from "./smartRouter/types";
-import type { SupportedChainId, Trade } from "./types";
+import { CHAIN_CONFIGS } from './config'
+import { encodeTrade } from './smartRouter/encodeTrade'
+import type { EncodeArgs } from './smartRouter/types'
+import type { Trade } from './types'
+import { NoRouterAddressError } from './errors'
 
-export type TradeTxOptions = Omit<EncodeArgs, "recipient"> & {
-  routerAddress?: string;
-};
+export type TradeTxOptions = Omit<EncodeArgs, 'recipient'> & {
+  routerAddress?: string
+}
 export type ExecuteTradeOptions = TradeTxOptions & {
-  recipient?: string;
-};
+  recipient?: string
+}
 
-export async function executeTrade(
-  chainId: SupportedChainId,
-  trade: Trade,
-  signer: Signer,
-  options: ExecuteTradeOptions = {},
-) {
-  const recipient = options.recipient ?? (await signer.getAddress());
-  return signer.sendTransaction(
-    prepareTradeTxRequest(chainId, trade, recipient, options),
-  );
+export async function executeTrade(chainId: number, trade: Trade, signer: Signer, options: ExecuteTradeOptions = {}) {
+  const recipient = options.recipient ?? (await signer.getAddress())
+  return signer.sendTransaction(prepareTradeTxRequest(chainId, trade, recipient, options))
 }
 
 export function prepareTradeTxRequest(
-  chainId: SupportedChainId,
+  chainId: number,
   trade: Trade,
   recipient: string,
   options: TradeTxOptions = {},
 ): TransactionRequest {
-  const routerAddress =
-    options.routerAddress ?? getContractAddress(chainId, "SmartRouter");
-  if (!routerAddress) throw new Error("No router address found for chain");
+  const routerAddress = options.routerAddress ?? CHAIN_CONFIGS[chainId]?.contractAddresses.smartRouter
+  if (!routerAddress) throw new NoRouterAddressError(chainId)
 
   const { value, calldata } = encodeTrade(trade, {
     recipient,
     ...options,
-  });
+  })
   return {
     to: routerAddress,
     data: calldata,
     value,
-  };
+  }
 }

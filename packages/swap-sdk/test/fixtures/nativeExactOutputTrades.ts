@@ -1,12 +1,12 @@
-import type { Trade } from "../../src";
-import { fromJSON } from "../../src/utils";
+import type { Trade } from '../../src'
+import { fromJSON } from '../../src/utils'
 
 export function nativeToVvsExactOutputTrade(): Trade {
-  return fromJSON(nativeToVvsExactOutputTradeJSON);
+  return fromJSON(nativeToVvsExactOutputTradeJSON)
 }
 
 export function vvsToNativeV3ExactOutputTrade(): Trade {
-  return fromJSON(vvsToNativeV3ExactOutputTradeJSON);
+  return fromJSON(vvsToNativeV3ExactOutputTradeJSON)
 }
 
 const nativeToVvsExactOutputTradeJSON = `
@@ -160,7 +160,7 @@ const nativeToVvsExactOutputTradeJSON = `
     }
   }
 }
-`;
+`
 
 const vvsToNativeV3ExactOutputTradeJSON = `
 {
@@ -304,4 +304,4 @@ const vvsToNativeV3ExactOutputTradeJSON = `
     }
   }
 }
-`;
+`

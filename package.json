@@ -2,14 +2,19 @@
   "name": "swap-sdk",
   "private": true,
   "scripts": {
-    "build": "dotenvx run -- turbo build --force",
-    "dev": "dotenvx run -- turbo dev",
+    "dev": "dotenvx run -- turbo dev @vvs-finance/swap-sdk#dev:build @vvs-finance/swap-sdk#dev:tsc @vvs-finance/swap-widget#dev:build @vvs-finance/swap-widget#dev:tsc",
+    "dev:widget": "dotenvx run -- turbo dev:widget @vvs-finance/swap-widget#dev:tsc",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format-check": "prettier --check \"**/*.{ts,tsx,md}\"",
     "lint": "dotenvx run -- turbo lint",
+    "ts-check": "dotenvx run -- turbo ts-check",
     "test": "dotenvx run -- turbo test",
     "test:swap-sdk": "dotenvx run -- turbo test --filter=@vvs-finance/swap-sdk",
-    "release:swap-sdk": "dotenvx run -- turbo @vvs-finance/swap-sdk#release",
+    "build": "dotenvx run -- turbo build --force",
     "release-local:swap-sdk": "dotenvx run -- turbo @vvs-finance/swap-sdk#release-local",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "release:swap-sdk": "dotenvx run -- turbo @vvs-finance/swap-sdk#release",
+    "release-local:swap-widget": "dotenvx run -- turbo @vvs-finance/swap-widget#release-local",
+    "release:swap-widget": "dotenvx run -- turbo @vvs-finance/swap-widget#release"
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.32.1",

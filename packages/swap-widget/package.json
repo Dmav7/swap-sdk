@@ -1,0 +1,65 @@
+{
+  "name": "@vvs-finance/swap-widget",
+  "version": "0.0.1",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev:build": "vite build --watch",
+    "dev:tsc": "tsc -b --watch",
+    "dev:widget": "vite",
+    "lint": "eslint .",
+    "ts-check": "tsc --noEmit",
+    "preview": "vite preview",
+    "build": "rm -rf dist && tsc -b && vite build",
+    "release-local": "yalc publish",
+    "release": "pnpm publish"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./style.css": "./dist/index.css"
+  },
+  "main": "dist/index.cjs",
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/react": ">=17",
+    "@types/react-dom": ">=17",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "postcss": "^8.4.49",
+    "react-dom": ">=17",
+    "tailwindcss": "^3.4.17",
+    "typescript": "5.5.4",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.5",
+    "vite-plugin-dts": "^4.4.0"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@react-web3-wallet/bitget-wallet": "^1.0.0",
+    "@react-web3-wallet/brave-wallet": "^3.0.0",
+    "@react-web3-wallet/cryptocom-desktop-wallet": "^3.0.0",
+    "@react-web3-wallet/defiwallet": "^3.0.0",
+    "@react-web3-wallet/metamask": "^3.0.0",
+    "@react-web3-wallet/react": "^3.0.0",
+    "@vvs-finance/swap-sdk": "workspace:*",
+    "bi-fraction": "^1.2.1",
+    "clsx": "^2.1.1",
+    "ethers": "6.13.4",
+    "swr": "^2.3.2",
+    "vite-plugin-svgr": "^4.3.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "zustand": "^5.0.3"
+  }
+}

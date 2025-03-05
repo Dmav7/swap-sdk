@@ -1,0 +1,46 @@
+name: Check
+
+on: # run check when push to any branches, but not tags
+  push:
+    branches: [ '**' ]
+
+jobs:
+  format_check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: ./.github/actions/setup
+
+    - run: pnpm format-check
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: ./.github/actions/setup
+
+    - run: pnpm lint
+
+  type_check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: ./.github/actions/setup
+
+    - run: pnpm ts-check
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: ./.github/actions/setup
+
+    - run: pnpm test

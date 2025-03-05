@@ -1,33 +1,46 @@
-import type { BaseContract, InterfaceAbi, Signer } from "ethers";
+import type { BaseContract, InterfaceAbi, Signer } from 'ethers'
 
-import { SmartRouter as SmartRouterAbi } from "./abis";
-import type { ContractAddressMap, ContractName } from "./config";
-import { getContractAddress } from "./config";
-import { QUOTE_API_ENDPOINT_BY_CHAIN } from "./config/quoteApi";
-import type { ExecuteTradeOptions, TradeTxOptions } from "./executeTrade";
-import { executeTrade, prepareTradeTxRequest } from "./executeTrade";
-import type { AmountArg, InputOutputTokenArg } from "./fetchBestTrade";
-import { fetchBestTrade } from "./fetchBestTrade";
-import type { BestAMMTradeOpts, SignerOrProvider, Trade } from "./types";
-import type { ProviderOptions } from "./utils";
-import { getContract, getProvider } from "./utils";
+import { ERC20 as ERC20Abi, SmartRouter as SmartRouterAbi } from './abis'
+import { CHAIN_CONFIGS } from './config'
+import { QUOTE_API_CHAIN_NAMES, QUOTE_API_ENDPOINT_BY_CHAIN } from './config/quoteApi'
+import type { ExecuteTradeOptions, TradeTxOptions } from './executeTrade'
+import { executeTrade, prepareTradeTxRequest } from './executeTrade'
+import type { AmountArg, InputOutputTokenArg } from './fetchBestTrade'
+import { fetchBestTrade } from './fetchBestTrade'
+import type { BestAMMTradeOpts, SignerOrProvider, Trade, ERC20, SmartRouter, ChainConfig } from './types'
+import type { ProviderOptions } from './utils'
+import { getContract, getProvider } from './utils'
+import { IncompleteChainConfigError, NoQuoteApiEndpointError, NoQuoteApiChainNameError } from './errors'
 
 export interface SDKOptions {
-  providerOptions: ProviderOptions;
-  contractAddressMap?: ContractAddressMap;
-  quoteApiEndpoint?: string;
+  providerOptions: ProviderOptions
+  chainConfig?: ChainConfig
+  quoteApiEndpoint?: string
+  quoteApiChainName?: string
+  quoteApiClientId?: string
 }
 
 export class SwapSDK {
-  private providerOptions: SDKOptions["providerOptions"];
-  private contractAddressMap?: ContractAddressMap;
-  private quoteApiEndpoint?: string;
+  private providerOptions: SDKOptions['providerOptions']
+  private chainConfig: ChainConfig
+  private quoteApiEndpoint: string
+  private quoteApiChainName: string
+  private quoteApiClientId?: string
 
   constructor(options: SDKOptions) {
-    const { providerOptions, contractAddressMap, quoteApiEndpoint } = options;
-    this.providerOptions = providerOptions;
-    this.contractAddressMap = contractAddressMap;
-    this.quoteApiEndpoint = quoteApiEndpoint;
+    this.providerOptions = options.providerOptions
+    const chainConfig = options.chainConfig ?? CHAIN_CONFIGS[this.providerOptions.chainId]
+    const quoteApiEndpoint = options.quoteApiEndpoint ?? QUOTE_API_ENDPOINT_BY_CHAIN[this.providerOptions.chainId]
+    const quoteApiChainName = options.quoteApiChainName ?? QUOTE_API_CHAIN_NAMES[this.providerOptions.chainId]
+
+    if (!chainConfig) throw new IncompleteChainConfigError(this.providerOptions.chainId, chainConfig)
+    if (!quoteApiEndpoint) throw new NoQuoteApiEndpointError(this.providerOptions.chainId)
+    if (!quoteApiChainName) throw new NoQuoteApiChainNameError(this.providerOptions.chainId)
+
+    this.chainConfig = chainConfig
+    this.quoteApiEndpoint = quoteApiEndpoint
+    this.quoteApiChainName = quoteApiChainName
+    this.quoteApiClientId = options.quoteApiClientId
   }
 
   /**
@@ -46,40 +59,24 @@ export class SwapSDK {
     amount: AmountArg,
     argOpts: Partial<BestAMMTradeOpts> = {},
   ) {
-    return fetchBestTrade(
-      this.providerOptions.chainId,
-      inputTokenAddressArg,
-      outputTokenAddressArg,
-      amount,
-      {
-        quoteApiEndpoint: this.getQuoteApiEndpoint(),
-        ...argOpts,
-      },
-    );
+    return fetchBestTrade(this.providerOptions.chainId, inputTokenAddressArg, outputTokenAddressArg, amount, {
+      chainConfig: this.chainConfig,
+      quoteApiEndpoint: this.getQuoteApiEndpoint(),
+      quoteApiChainName: this.quoteApiChainName,
+      quoteApiClientId: this.quoteApiClientId,
+      ...argOpts,
+    })
   }
 
-  public executeTrade(
-    trade: Trade,
-    signer: Signer,
-    options: ExecuteTradeOptions = {},
-  ) {
+  public executeTrade(trade: Trade, signer: Signer, options: ExecuteTradeOptions = {}) {
     return executeTrade(this.providerOptions.chainId, trade, signer, {
-      routerAddress: this.getContractAddress("SmartRouter"),
+      routerAddress: this.chainConfig.contractAddresses.smartRouter,
       ...options,
-    });
+    })
   }
 
-  public prepareTradeTxRequest(
-    trade: Trade,
-    recipient: string,
-    options: TradeTxOptions = {},
-  ) {
-    return prepareTradeTxRequest(
-      this.providerOptions.chainId,
-      trade,
-      recipient,
-      options,
-    );
+  public prepareTradeTxRequest(trade: Trade, recipient: string, options: TradeTxOptions = {}) {
+    return prepareTradeTxRequest(this.providerOptions.chainId, trade, recipient, options)
   }
 
   private getContract = <T extends BaseContract = BaseContract>(
@@ -88,31 +85,19 @@ export class SwapSDK {
     signerOrProvider?: SignerOrProvider,
   ): T => {
     if (!signerOrProvider) {
-      signerOrProvider = getProvider(this.providerOptions);
+      signerOrProvider = getProvider(this.providerOptions)
     }
 
-    return getContract<T>(address, abi, signerOrProvider);
-  };
-
-  public getContractAddress = (contractName: ContractName) => {
-    if (this.contractAddressMap) {
-      return this.contractAddressMap[contractName];
-    }
-
-    return getContractAddress(this.providerOptions.chainId, contractName);
-  };
+    return getContract<T>(address, abi, signerOrProvider)
+  }
 
   public getQuoteApiEndpoint() {
-    return (
-      this.quoteApiEndpoint ??
-      QUOTE_API_ENDPOINT_BY_CHAIN[this.providerOptions.chainId]
-    );
+    return this.quoteApiEndpoint ?? QUOTE_API_ENDPOINT_BY_CHAIN[this.providerOptions.chainId]
   }
 
   public getSmartRouter = (signerOrProvider?: SignerOrProvider) =>
-    this.getContract(
-      this.getContractAddress("SmartRouter"),
-      SmartRouterAbi,
-      signerOrProvider,
-    );
+    this.getContract<SmartRouter>(this.chainConfig?.contractAddresses.smartRouter, SmartRouterAbi, signerOrProvider)
+
+  public getERC20 = (address: string, signerOrProvider?: SignerOrProvider): ERC20 =>
+    this.getContract<ERC20>(address, ERC20Abi, signerOrProvider)
 }

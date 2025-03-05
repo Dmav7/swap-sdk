@@ -1,18 +1,15 @@
-import { Fraction } from "bi-fraction";
+import { Fraction } from 'bi-fraction'
 
-import {
-  DEFAULT_FETCH_QUOTE_OPTS,
-  QUOTE_API_ENDPOINT_BY_CHAIN,
-} from "./config/quoteApi";
-import { WRAPPED_NATIVE_TOKEN_BY_CHAIN } from "./config/wrappedNativeToken";
-import { fetchQuoteApi } from "./quoteApi/fetchQuoteApi";
-import { parseQuoteApiData } from "./quoteApi/parseQuoteApiData";
-import type { SupportedChainId } from "./types";
-import type { BestAMMTradeOpts, Trade } from "./types/trade";
+import { fetchQuoteApi } from './quoteApi/fetchQuoteApi'
+import { parseQuoteApiData } from './quoteApi/parseQuoteApiData'
+import type { BuiltInChainId, ChainConfig } from './types'
+import type { BestAMMTradeOpts, Trade } from './types/trade'
+import { DEFAULT_FETCH_BEST_TRADE_OPTS } from './config'
+import { getWrappedNativeTokenInfo } from './utils/nativeWrappedToken'
 
-export const NATIVE_TOKEN_ID = "NATIVE" as const;
-export type InputOutputTokenArg = typeof NATIVE_TOKEN_ID | string;
-export type AmountArg = string | { wei: bigint | string; decimals: number };
+export const NATIVE_TOKEN_ID = 'NATIVE' as const
+export type InputOutputTokenArg = typeof NATIVE_TOKEN_ID | string
+export type AmountArg = string | { wei: bigint | string; decimals: number }
 
 /**
  * @param chainId
@@ -26,7 +23,7 @@ export type AmountArg = string | { wei: bigint | string; decimals: number };
  * * "0.7" is equivalent to { wei: 7000000000000000000n, decimals: 18 }
  */
 export async function fetchBestTrade(
-  chainId: SupportedChainId,
+  chainId: BuiltInChainId,
   inputTokenAddressArg: InputOutputTokenArg,
   outputTokenAddressArg: InputOutputTokenArg,
   amount: AmountArg,
@@ -35,16 +32,18 @@ export async function fetchBestTrade(
   const [isInputNative, inputTokenAddress] = parseAndWrapNativeTokenAddr(
     chainId,
     inputTokenAddressArg,
-  );
+    argOpts.chainConfig,
+  )
   const [isOutputNative, outputTokenAddress] = parseAndWrapNativeTokenAddr(
     chainId,
     outputTokenAddressArg,
-  );
+    argOpts.chainConfig,
+  )
 
   const opts = {
-    ...DEFAULT_FETCH_QUOTE_OPTS,
+    ...DEFAULT_FETCH_BEST_TRADE_OPTS,
     ...argOpts,
-  };
+  }
 
   const quoteData = await fetchQuoteApi({
     chainId,
@@ -52,30 +51,25 @@ export async function fetchBestTrade(
     outputTokenAddress,
     amount: parseAmountArg(amount),
     ...opts,
-  });
+  })
 
-  return parseQuoteApiData(
-    chainId,
-    quoteData,
-    isInputNative,
-    isOutputNative,
-    opts,
-  );
+  return parseQuoteApiData(chainId, quoteData, isInputNative, isOutputNative, opts)
 }
 
 function parseAmountArg(amount: AmountArg): string {
-  if (typeof amount === "string") {
-    return amount;
+  if (typeof amount === 'string') {
+    return amount
   }
-  return new Fraction(amount.wei).shr(amount.decimals).toFixed(amount.decimals);
+  return new Fraction(amount.wei).shr(amount.decimals).toFixed(amount.decimals)
 }
 
 function parseAndWrapNativeTokenAddr(
-  chainId: SupportedChainId,
+  chainId: BuiltInChainId,
   inputOutputTokenAddress: InputOutputTokenArg,
+  chainConfig?: ChainConfig,
 ): [isNative: boolean, address: string] {
   if (inputOutputTokenAddress === NATIVE_TOKEN_ID) {
-    return [true, WRAPPED_NATIVE_TOKEN_BY_CHAIN[chainId].address];
+    return [true, getWrappedNativeTokenInfo(chainId, chainConfig).address]
   }
-  return [false, inputOutputTokenAddress];
+  return [false, inputOutputTokenAddress]
 }

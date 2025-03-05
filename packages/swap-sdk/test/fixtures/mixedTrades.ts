@@ -1,11 +1,11 @@
-import type { Trade, TradeRoute } from "../../src";
-import { fromJSON } from "../../src/utils";
+import type { Trade, TradeRoute } from '../../src'
+import { fromJSON } from '../../src/utils'
 
 export function usdcToFulMixedTrade(): Trade {
-  return fromJSON(usdcToFulMixedTradeJSON);
+  return fromJSON(usdcToFulMixedTradeJSON)
 }
 export function usdcToFulMixedTradeRoute(): TradeRoute {
-  return usdcToFulMixedTrade().routes[0];
+  return usdcToFulMixedTrade().routes[0]
 }
 
 const usdcToFulMixedTradeJSON = `
@@ -195,4 +195,4 @@ const usdcToFulMixedTradeJSON = `
     }
   }
 }
-`;
+`

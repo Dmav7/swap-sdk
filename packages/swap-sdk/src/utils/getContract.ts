@@ -1,7 +1,7 @@
-import type { InterfaceAbi } from "ethers";
-import { BaseContract } from "ethers";
+import type { InterfaceAbi } from 'ethers'
+import { BaseContract } from 'ethers'
 
-import type { SignerOrProvider } from "../types";
+import type { SignerOrProvider } from '../types'
 
 /**
  * @param chainId the chain on which the contract is deployed
@@ -15,5 +15,5 @@ export function getContract<T extends BaseContract = BaseContract>(
   abi: InterfaceAbi,
   signerOrProvider?: SignerOrProvider,
 ): T {
-  return new BaseContract(address, abi, signerOrProvider) as T;
+  return new BaseContract(address, abi, signerOrProvider) as T
 }

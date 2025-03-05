@@ -12,11 +12,11 @@ To install the Swap SDK, run the following command:
 npm install @vvs-finance/swap-sdk
 ```
 
-## Prepare client ID
+## Prepare quote API client ID
 
 `fetchBestTrade` function depends on our optimized quote API for best trading deal and smooth experience.
 
-To access our quote API, please submit a ticket in our [Discord](https//discord.com/invite/V2957zMsmg) to request a client ID.
+To access our quote API, please submit a ticket in our [Discord](https://discord.com/invite/V2957zMsmg) to request a client ID.
 
 ## Usage
 
@@ -33,31 +33,19 @@ To fetch the best trade, you can use the `fetchBestTrade` function. This functio
 #### Example
 
 ```typescript
-import {
-  fetchBestTrade,
-  PoolType,
-  SupportedChainId,
-} from "@vvs-finance/swap-sdk";
+import { fetchBestTrade, PoolType, BuiltInChainId } from '@vvs-finance/swap-sdk'
 
-const chainId = SupportedChainId.CRONOS_MAINNET;
-const inputToken = "NATIVE";
-const outputToken = "0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03";
-const amount = "2.5";
+const chainId = BuiltInChainId.CRONOS_MAINNET
+const inputToken = 'NATIVE'
+const outputToken = '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03'
+const amount = '2.5'
 
 fetchBestTrade(chainId, inputToken, outputToken, amount, {
-  maxHops: 3,
-  maxSplits: 2,
-  poolTypes: [
-    PoolType.V2,
-    PoolType.V3_100,
-    PoolType.V3_500,
-    PoolType.V3_3000,
-    PoolType.V3_10000,
-  ],
-  quoteApiClientId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
+  poolTypes: [PoolType.V2, PoolType.V3_100, PoolType.V3_500, PoolType.V3_3000, PoolType.V3_10000],
+  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
 }).then((trade) => {
-  console.log(trade);
-});
+  console.log(trade)
+})
 ```
 
 ### Executing a Trade via `executeTrade`
@@ -71,28 +59,24 @@ To execute a trade, you can use the `executeTrade` function. This function takes
 #### Example
 
 ```typescript
-import {
-  fetchBestTrade,
-  executeTrade,
-  SupportedChainId,
-} from "@vvs-finance/swap-sdk";
-import { ethers } from "ethers";
+import { fetchBestTrade, executeTrade, BuiltInChainId } from '@vvs-finance/swap-sdk'
+import { ethers } from 'ethers'
 
-const chainId = SupportedChainId.CRONOS_MAINNET;
-const inputToken = "NATIVE";
-const outputToken = "0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03";
-const amount = "2.5";
+const chainId = BuiltInChainId.CRONOS_MAINNET
+const inputToken = 'NATIVE'
+const outputToken = '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03'
+const amount = '2.5'
 
 fetchBestTrade(chainId, inputToken, outputToken, amount, {
-  quoteApiClientId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
+  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
 }).then(async (trade) => {
-  console.log(trade);
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  const signer = await provider.getSigner();
-  const tx = await executeTrade(chainId, trade, signer);
-  console.log(tx);
-  return tx.wait();
-});
+  console.log(trade)
+  const provider = new ethers.BrowserProvider(window.ethereum)
+  const signer = await provider.getSigner()
+  const tx = await executeTrade(chainId, trade, signer)
+  console.log(tx)
+  return tx.wait()
+})
 ```
 
 ### Executing a Trade via your own web3 interface
@@ -106,30 +90,26 @@ To execute a trade with your own web3 interface, you can use the `prepareTradeTx
 #### Example
 
 ```typescript
-import {
-  fetchBestTrade,
-  SupportedChainId,
-  prepareTradeTxRequest,
-} from "@vvs-finance/swap-sdk";
-import { ethers } from "ethers";
+import { fetchBestTrade, BuiltInChainId, prepareTradeTxRequest } from '@vvs-finance/swap-sdk'
+import { ethers } from 'ethers'
 
-const chainId = SupportedChainId.CRONOS_MAINNET;
-const inputToken = "NATIVE";
-const outputToken = "0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03";
-const amount = "2.5";
+const chainId = BuiltInChainId.CRONOS_MAINNET
+const inputToken = 'NATIVE'
+const outputToken = '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03'
+const amount = '2.5'
 
-const provider = new ethers.JsonRpcProvider("https://evm.cronos.org/");
-const wallet = new ethers.Wallet("PRIVATE_KEY", provider);
+const provider = new ethers.JsonRpcProvider('https://evm.cronos.org/')
+const wallet = new ethers.Wallet('PRIVATE_KEY', provider)
 
 fetchBestTrade(chainId, inputToken, outputToken, amount, {
-  quoteApiClientId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
+  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
 }).then(async (trade) => {
-  console.log(trade);
-  const txRequest = prepareTradeTxRequest(chainId, trade, wallet.address);
-  const tx = await wallet.sendTransaction(txRequest);
-  console.log({ txRequest, tx });
-  return tx.wait();
-});
+  console.log(trade)
+  const txRequest = prepareTradeTxRequest(chainId, trade, wallet.address)
+  const tx = await wallet.sendTransaction(txRequest)
+  console.log({ txRequest, tx })
+  return tx.wait()
+})
 ```
 
 ### API Reference
@@ -141,8 +121,8 @@ Fetches the best trade for the given parameters.
 ##### Parameters
 
 - `chainId`: The ID of the blockchain network. can be:
-  - `SupportedChainId.CRONOS_MAINNET` (25)
-  - `SupportedChainId.CRONOS_TESTNET` (338)
+  - `BuiltInChainId.CRONOS_MAINNET` (25)
+  - `BuiltInChainId.CRONOS_TESTNET` (338)
 - `inputTokenAddressArg`: The address of the input token or "NATIVE" for the native token.
 - `outputTokenAddressArg`: The address of the output token or "NATIVE" for the native token.
 - `amount`: The amount to be used as input or output.
@@ -183,8 +163,8 @@ Executes the given trade on the blockchain.
 ##### Parameters
 
 - `chainId`: The ID of the blockchain network. can be:
-  - `SupportedChainId.CRONOS_MAINNET`
-  - `SupportedChainId.CRONOS_TESTNET`
+  - `BuiltInChainId.CRONOS_MAINNET`
+  - `BuiltInChainId.CRONOS_TESTNET`
 - `trade`: `Trade` - The trade object obtained from `fetchBestTrade`.
 - `signer`: `Signer` - The signer object to sign the transaction.
 - `options`: `ExecuteTradeOptions` - Optional arguments for executing the trade.
@@ -204,8 +184,8 @@ Encode calldata and prepare transaction request object.
 ##### Parameters
 
 - `chainId`: The ID of the blockchain network. can be:
-  - `SupportedChainId.CRONOS_MAINNET`
-  - `SupportedChainId.CRONOS_TESTNET`
+  - `BuiltInChainId.CRONOS_MAINNET`
+  - `BuiltInChainId.CRONOS_TESTNET`
 - `trade`: `Trade` - The trade object obtained from `fetchBestTrade`.
 - `recipient`: where output token should be sent
 - `options`: `TradeTxOptions` - Optional arguments for executing the trade.
@@ -230,6 +210,12 @@ pnpm test:swap-sdk -- packages/swap-sdk/test/fetchBestTrade.test.ts # run a test
 
 - package source entrypoint: `packages/swap-sdk/src/index.ts`
 - tests: `packages/swap-sdk/test/`
+
+### VVS Finance Swap Widget
+
+`@vvs-finance/swap-widget` is a React library that provides a `<SwapWidget />` component for integrating a swap widget into your application.
+
+see [packages/swap-widget/README.md](./packages/swap-widget/README.md) for more information on how to use and develop the widget.
 
 ### License
 

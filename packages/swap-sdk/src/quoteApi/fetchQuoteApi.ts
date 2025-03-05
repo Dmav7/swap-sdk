@@ -1,58 +1,42 @@
-import fetch from "node-fetch";
-
-import { SupportedChainId } from "../types";
-import { PoolType, TradeType } from "../types/base";
-import type { BestAMMTradeOpts } from "../types/trade";
+import type { BestAMMTradeOpts } from '../types/trade'
 import {
-  NetworkUnsupportedError,
+  NoQuoteApiChainNameError,
   NoQuoteApiClientIdError,
   NoQuoteApiEndpointError,
   PoolUnsupportedError,
+  TradeTypeUnsupportedError,
+} from '../errors'
+import {
   ServerChainUnsupportedError,
   ServerInsufficientLiquidityError,
   ServerOtherError,
   ServerPoolUnsupportedError,
   ServerTokenUnsupportedError,
-  TradeTypeUnsupportedError,
-} from "./errors";
-import type { TradeQuoteData } from "./types";
-import { QUOTE_API_ENDPOINT_BY_CHAIN } from "../config/quoteApi";
-
-const API_CHAIN_NAMES: Record<SupportedChainId, string> = {
-  [SupportedChainId.CRONOS_MAINNET]: "CRONOS",
-  [SupportedChainId.CRONOS_TESTNET]: "CRONOS",
-};
-
-const API_TRADE_TYPES: Record<TradeType, string> = {
-  [TradeType.EXACT_INPUT]: "EXACT_INPUT",
-  [TradeType.EXACT_OUTPUT]: "EXACT_OUTPUT",
-};
-
-const API_POOL_TYPES: Record<PoolType, string> = {
-  [PoolType.V2]: "V2",
-  [PoolType.V3_100]: "V3_100",
-  [PoolType.V3_500]: "V3_500",
-  [PoolType.V3_3000]: "V3_3000",
-  [PoolType.V3_10000]: "V3_10000",
-};
+} from './serverErrors'
+import type { TradeQuoteData } from './types'
+import {
+  QUOTE_API_CHAIN_NAMES,
+  QUOTE_API_ENDPOINT_BY_CHAIN,
+  QUOTE_API_POOL_TYPES,
+  QUOTE_API_TRADE_TYPES,
+} from '../config/quoteApi'
+import { getEnv } from '../utils/getEnv'
 
 type FetchQuoteApiArgs = {
-  chainId: SupportedChainId;
-  inputTokenAddress: string;
-  outputTokenAddress: string;
+  chainId: number
+  inputTokenAddress: string
+  outputTokenAddress: string
 
-  amount: string;
-} & BestAMMTradeOpts;
+  amount: string
+} & BestAMMTradeOpts
 
 interface TradeQuoteRes {
-  code: number;
-  data: TradeQuoteData;
-  message: string;
+  code: number
+  data: TradeQuoteData
+  message: string
 }
 
-export async function fetchQuoteApi(
-  args: FetchQuoteApiArgs,
-): Promise<TradeQuoteData> {
+export async function fetchQuoteApi(args: FetchQuoteApiArgs): Promise<TradeQuoteData> {
   const {
     chainId,
     inputTokenAddress,
@@ -64,44 +48,42 @@ export async function fetchQuoteApi(
     poolTypes,
     quoteApiEndpoint,
     quoteApiClientId,
-  } = args;
-  const chainName = API_CHAIN_NAMES[chainId];
-  if (!chainName) {
-    throw new NetworkUnsupportedError(chainId);
-  }
+    quoteApiChainName,
+  } = args
 
   const endpoint =
-    quoteApiEndpoint ??
-    process.env[`SWAP_SDK_QUOTE_API_ENDPOINT_${chainId}`] ??
-    QUOTE_API_ENDPOINT_BY_CHAIN[chainId];
-  const clientId =
-    quoteApiClientId ?? process.env[`SWAP_SDK_QUOTE_API_CLIENT_ID_${chainId}`];
+    quoteApiEndpoint ?? getEnv(`SWAP_SDK_QUOTE_API_ENDPOINT_${chainId}`) ?? QUOTE_API_ENDPOINT_BY_CHAIN[chainId]
+  const clientId = quoteApiClientId ?? getEnv(`SWAP_SDK_QUOTE_API_CLIENT_ID_${chainId}`)
 
   if (!endpoint) {
-    throw new NoQuoteApiEndpointError(chainId);
+    throw new NoQuoteApiEndpointError(chainId)
   }
   if (!clientId) {
-    throw new NoQuoteApiClientIdError(chainId);
+    throw new NoQuoteApiClientIdError(chainId)
   }
 
-  const apiTradeType = API_TRADE_TYPES[tradeType];
+  const apiChainName = quoteApiChainName ?? QUOTE_API_CHAIN_NAMES[chainId]
+  if (!apiChainName) {
+    throw new NoQuoteApiChainNameError(chainId)
+  }
+  const apiTradeType = QUOTE_API_TRADE_TYPES[tradeType]
   if (!apiTradeType) {
-    throw new TradeTypeUnsupportedError(tradeType);
+    throw new TradeTypeUnsupportedError(tradeType)
   }
 
-  const apiPoolTypes = poolTypes.map((poolType) => API_POOL_TYPES[poolType]);
+  const apiPoolTypes = poolTypes.map((poolType) => QUOTE_API_POOL_TYPES[poolType])
   if (apiPoolTypes.some((poolType) => !poolType)) {
-    throw new PoolUnsupportedError(poolTypes);
+    throw new PoolUnsupportedError(poolTypes)
   }
 
   const response = await fetch(endpoint, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "x-client-id": clientId,
+      'Content-Type': 'application/json',
+      'x-client-id': clientId,
     },
     body: JSON.stringify({
-      chain: chainName,
+      chain: apiChainName,
       currencyIn: inputTokenAddress,
       currencyOut: outputTokenAddress,
       amount,
@@ -110,30 +92,27 @@ export async function fetchQuoteApi(
       maxSplits,
       poolTypes: apiPoolTypes,
     }),
-  });
+  })
 
-  const quoteRes = (await response.json()) as TradeQuoteRes;
-  throwIfError(quoteRes, args);
+  const quoteRes = (await response.json()) as TradeQuoteRes
+  throwIfError(quoteRes, args)
 
-  return quoteRes.data;
+  return quoteRes.data
 }
 
 function throwIfError(quoteRes: TradeQuoteRes, args: FetchQuoteApiArgs) {
-  if (quoteRes.code === 0 && quoteRes.data) return;
+  if (quoteRes.code === 0 && quoteRes.data) return
 
   switch (quoteRes.code) {
     case 40000:
-      throw new ServerChainUnsupportedError(args.chainId);
+      throw new ServerChainUnsupportedError(args.chainId)
     case 40001:
-      throw new ServerPoolUnsupportedError(args.poolTypes);
+      throw new ServerPoolUnsupportedError(args.poolTypes)
     case 40002:
-      throw new ServerTokenUnsupportedError(
-        args.inputTokenAddress,
-        args.outputTokenAddress,
-      );
+      throw new ServerTokenUnsupportedError(args.inputTokenAddress, args.outputTokenAddress)
     case 40003:
-      throw new ServerInsufficientLiquidityError();
+      throw new ServerInsufficientLiquidityError()
     default:
-      throw new ServerOtherError(quoteRes.message);
+      throw new ServerOtherError(quoteRes.message)
   }
 }

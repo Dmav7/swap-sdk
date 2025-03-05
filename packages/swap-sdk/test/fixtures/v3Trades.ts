@@ -1,18 +1,18 @@
-import type { Trade, TradeRoute } from "../../src";
-import { fromJSON } from "../../src/utils";
+import type { Trade, TradeRoute } from '../../src'
+import { fromJSON } from '../../src/utils'
 
 export function usdcToVvsV3SimpleTrade(): Trade {
-  return fromJSON(usdcToVvsV3SimpleTradeJSON);
+  return fromJSON(usdcToVvsV3SimpleTradeJSON)
 }
 export function usdcToVvsV3SimpleTradeRoute(): TradeRoute {
-  return usdcToVvsV3SimpleTrade().routes[0];
+  return usdcToVvsV3SimpleTrade().routes[0]
 }
 
 export function vvsToUsdcV3ExactOutputTrade(): Trade {
-  return fromJSON(vvsToUsdcV3ExactOutputTradeJSON);
+  return fromJSON(vvsToUsdcV3ExactOutputTradeJSON)
 }
 export function vvsToUsdcV3ExactOutputTradeRoute(): TradeRoute {
-  return vvsToUsdcV3ExactOutputTrade().routes[0];
+  return vvsToUsdcV3ExactOutputTrade().routes[0]
 }
 
 const usdcToVvsV3SimpleTradeJSON = `
@@ -157,7 +157,7 @@ const usdcToVvsV3SimpleTradeJSON = `
     }
   }
 }
-`;
+`
 
 const vvsToUsdcV3ExactOutputTradeJSON = `
 {
@@ -301,4 +301,4 @@ const vvsToUsdcV3ExactOutputTradeJSON = `
     }
   }
 }
-`;
+`

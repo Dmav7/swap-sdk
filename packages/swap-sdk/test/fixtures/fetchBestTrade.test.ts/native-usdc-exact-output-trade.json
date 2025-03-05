@@ -97,6 +97,7 @@
         }
       ],
       "slippage": {
+        "minimumReceived": null,
         "maximumSold": {
           "amount": {
             "numerator": "303704315897134035549",
@@ -132,6 +133,7 @@
     "decimals": 18
   },
   "slippage": {
+    "minimumReceived": null,
     "maximumSold": {
       "amount": {
         "numerator": "303704315897134035549",
