@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import Yes from '@icons/Yes.svg?react'
 import No from '@icons/No.svg?react'
 import Close from '@icons/Close.svg?react'
+import useChainProviderOptions from '@hooks/useChainProviderOptions'
 
 export interface ToastProps {
   isOpen: boolean
@@ -16,6 +17,7 @@ export interface ToastProps {
 
 export default function Toast({ isOpen, onClose, status, txHash, text, errorMessage }: ToastProps) {
   const isSuccess = useMemo(() => status === 'success', [status])
+  const { chainExplorerBaseUrl, chainProviderOptions } = useChainProviderOptions()
 
   return (
     <div
@@ -39,12 +41,12 @@ export default function Toast({ isOpen, onClose, status, txHash, text, errorMess
             <div className="text-darkGray text-sm">{text}</div>
 
             <a
-              href={`https://cronoscan.com/tx/${txHash}`}
+              href={`${chainExplorerBaseUrl}/tx/${txHash}`}
               target="_blank"
               rel="noreferrer"
               className="text-base text-primary"
             >
-              View on Cronos Chain
+              View on {chainProviderOptions.chainName}
             </a>
           </>
         ) : (

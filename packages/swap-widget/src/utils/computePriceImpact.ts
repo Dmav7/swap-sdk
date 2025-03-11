@@ -12,7 +12,10 @@ const computePriceImpact = (trade: Undefined<Trade>, prices: Null<number>[]): Fr
 
   const actualOutputAmount = trade.amountOut.amount
 
-  const priceImpact = expectedOutputAmount.div(actualOutputAmount).sub(1).mul(100)
+  const priceImpact = expectedOutputAmount
+    .div(actualOutputAmount || 1)
+    .sub(1)
+    .mul(100)
 
   return priceImpact
 }

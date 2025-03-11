@@ -29,10 +29,6 @@ export function encodeV2Swaps(
     const minimumReceived =
       route.slippage?.type === 'minimumReceived' ? tokenAmountToWei(route.slippage.minimumReceived!) : 0n
 
-    if (route.amountIn.amount.lte(Fraction.ZERO)) {
-      throw new Error('encodeV2Swaps: does not support 0 amountIn with EXACT_INPUT')
-    }
-
     return encodeSmartRouterFunctionData('swapExactTokensForTokens', [
       tokenAmountToWei(route.amountIn),
       minimumReceived,

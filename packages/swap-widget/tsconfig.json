@@ -24,6 +24,7 @@
       "@icons/*": ["./src/icons/*"],
       "@styles/*": ["./src/styles/*"],
       "@states/*": ["./src/states/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@utils/*": ["./src/utils/*"],
       "@config/*": ["./src/config/*"],
     },

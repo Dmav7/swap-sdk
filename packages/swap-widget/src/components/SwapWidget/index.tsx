@@ -16,7 +16,7 @@ import SettingModal from '@components/SettingModal'
 import { WalletAccountPopover } from '@components/WalletAccountPopover'
 import Switch from '@components/Switch'
 import useTokenUsdcPrice, { useAdapterNativeToken } from '@states/useTokenUsdcPrice'
-import Toast from '../Toast'
+import Toast from '@components/Toast'
 import Tooltips from '@components/Tooltips'
 
 import { useWidgetWallet, watchAsset } from '@states/wallet'
@@ -142,9 +142,9 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
   const [txHash, setTxHash] = useState<Undefined<string>>(undefined)
 
   useEffect(() => {
-    setInputToken(inputTokenFromProps)
-    setOutputToken(outputTokenFromProps)
-  }, [supportedChainId, inputTokenFromProps, outputTokenFromProps])
+    if (!inputToken) setInputToken(inputTokenFromProps)
+    if (!outputToken) setOutputToken(outputTokenFromProps)
+  }, [supportedChainId, inputTokenFromProps, outputTokenFromProps, inputToken, outputToken])
 
   useEffect(() => {
     const trade = bestTrade.data
@@ -174,6 +174,9 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
   const { data, mutate: refetch } = useTokenUsdcPrice([inputTokenAddress, outputTokenAddress])
 
   const priceImpact = computePriceImpact(bestTrade.data, data ?? [])
+
+  const inputTokenBalance = useTokenBalance(inputToken?.address ?? '')
+  const outputTokenBalance = useTokenBalance(outputToken?.address ?? '')
 
   const handleConfirmSwap = useCallback(async () => {
     setIsOpenConfirmModal(false)
@@ -215,10 +218,14 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
           })
         }
 
+        setTxHash(tx?.hash)
+
         const receipt = await tx?.wait()
 
         if (receipt && receipt?.status === 1) {
-          setTxHash(receipt.hash)
+          inputTokenBalance?.mutate()
+          outputTokenBalance?.mutate()
+
           setToastStatus('success')
         }
       } catch (error) {
@@ -239,6 +246,8 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
     isUnWrappedNativeToken,
     isWrappedNativeToken,
     isWrappedOrUnWrappedNativeToken,
+    inputTokenBalance,
+    outputTokenBalance,
   ])
 
   const getMinReceivedOrMaxSold = useMemo(() => {
@@ -253,9 +262,6 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
     () => (tradeType === TradeType.EXACT_INPUT ? 'Minimum Received' : 'Maximum Sold'),
     [tradeType],
   )
-
-  const inputTokenBalance = useTokenBalance(inputToken?.address ?? '')
-  const outputTokenBalance = useTokenBalance(outputToken?.address ?? '')
 
   const getPairPrice = useCallback(
     () =>
@@ -422,7 +428,7 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
         </div>
       </div>
 
-      {getPairPrice().gt(0) && inputToken && outputToken && (
+      {account && getPairPrice().gt(0) && inputToken && outputToken && (
         <div className="flex justify-between items-center my-[-8px]">
           <span className="text-darkGray">Price</span>
 

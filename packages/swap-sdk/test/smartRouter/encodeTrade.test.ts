@@ -4,6 +4,11 @@ import { encodeTrade } from '../../src/smartRouter/encodeTrade'
 import { toJSON } from '../../src/utils'
 import { nativeToVvsExactOutputTrade, vvsToNativeV3ExactOutputTrade } from '../fixtures/nativeExactOutputTrades'
 import { nativeToVvsTrade, vvsToNativeTrade } from '../fixtures/nativeTokenTrades'
+import {
+  mutliHopV2MiddleExactInTrade,
+  mutliHopV2MiddleExactOutTrade,
+} from '../fixtures/smartRouter/multiHopV2MiddleTrades'
+import { serialization } from '../helpers'
 
 jest.mock('../../src/smartRouter/contractInterfaces', () => {
   const originalModule = jest.requireActual('../../src/smartRouter/contractInterfaces')
@@ -132,5 +137,79 @@ describe('encodeTrade', () => {
       const amountMinimum = 2140000000000000000n
       expect(spiedEncodeSmartRouterFunctionData.mock.calls[1]).toEqual(['unwrapWETH9', [amountMinimum, recipient]])
     }
+  })
+
+  it('multi-hop exactIn with v2 in the middle', async () => {
+    const trade = mutliHopV2MiddleExactInTrade()
+    const { calldata, value } = encodeTrade(trade, { recipient })
+
+    expect(calldata).toBeDefined()
+    expect(value).toBe(10000000000000000000n)
+
+    expect(spiedEncodeSmartRouterFunctionData.mock.calls).toHaveLength(4)
+
+    expect(serialization(spiedEncodeSmartRouterFunctionData.mock.calls[0])).toEqual([
+      'exactInputSingle',
+      [
+        {
+          tokenIn: '0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4',
+          tokenOut: '0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b',
+          fee: 3000,
+          recipient: '0x0000000000000000000000000000000000000002',
+          amountIn: {
+            __serializeType: 'bigint',
+            value: '10000000000000000000',
+          },
+          amountOutMinimum: {
+            __serializeType: 'bigint',
+            value: '0',
+          },
+          sqrtPriceLimitX96: 0,
+        },
+      ],
+    ])
+    expect(serialization(spiedEncodeSmartRouterFunctionData.mock.calls[1])).toEqual([
+      'swapExactTokensForTokens',
+      [
+        {
+          __serializeType: 'bigint',
+          value: '0',
+        },
+        {
+          __serializeType: 'bigint',
+          value: '0',
+        },
+        ['0x321106e51b78e0e9cebcfec63c5250f0f3ccb82b', '0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4'],
+        '0x0000000000000000000000000000000000000002',
+      ],
+    ])
+    expect(serialization(spiedEncodeSmartRouterFunctionData.mock.calls[2])).toEqual([
+      'exactInputSingle',
+      [
+        {
+          tokenIn: '0x6a3173618859c7cd40faf6921b5e9eb6a76f1fd4',
+          tokenOut: '0x904bd5a5aac0b9d88a0d47864724218986ad4a3a',
+          fee: 10000,
+          recipient: '0x0000000000000000000000000000000000000003',
+          amountIn: {
+            __serializeType: 'bigint',
+            value: '0',
+          },
+          amountOutMinimum: {
+            __serializeType: 'bigint',
+            value: '1345649462352235396390871',
+          },
+          sqrtPriceLimitX96: 0,
+        },
+      ],
+    ])
+  })
+
+  it('multi-hop exactOut with v2 in the middle', async () => {
+    const trade = mutliHopV2MiddleExactOutTrade()
+
+    expect(() => {
+      encodeTrade(trade, { recipient })
+    }).toThrow('encodeV2Swaps: does not support 0 amountOut with EXACT_OUTPUT')
   })
 })

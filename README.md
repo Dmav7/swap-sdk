@@ -205,7 +205,7 @@ cd swap-sdk
 pnpm install
 cp .env.example .env
 pnpm test
-pnpm test:swap-sdk -- packages/swap-sdk/test/fetchBestTrade.test.ts # run a test suite file in swap-sdk
+pnpm test:swap-sdk -- packages/swap-sdk/test/development.test.ts # run a test suite file in swap-sdk
 ```
 
 - package source entrypoint: `packages/swap-sdk/src/index.ts`
