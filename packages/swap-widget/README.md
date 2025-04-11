@@ -43,6 +43,8 @@ function App() {
 export default App
 ```
 
+For example, a simple Next.js page [index.tsx](../../examples/next-swap-widget-example/src/pages/index.tsx) in [next-swap-widget-example](../../examples/next-swap-widget-example/)
+
 #### Quote API Client ID
 
 `<SwapWidget />` depends on our optimized quote API for best trading deal and smooth experience.

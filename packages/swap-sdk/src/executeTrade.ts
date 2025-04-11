@@ -35,5 +35,6 @@ export function prepareTradeTxRequest(
     to: routerAddress,
     data: calldata,
     value,
+    gasPrice: options.gasPrice,
   }
 }

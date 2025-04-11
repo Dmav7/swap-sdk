@@ -5,14 +5,14 @@ import TransactionConfirmed from './TransactionConfirmed'
 export interface TransactionStatusModalProps {
   isOpen: boolean
   onClose: VoidFunction
-  swapText: string
+  pendingText?: string
   txHash?: string
 }
 
-export default function TransactionStatusModal({ txHash, swapText, isOpen, onClose }: TransactionStatusModalProps) {
+export default function TransactionStatusModal({ txHash, pendingText, isOpen, onClose }: TransactionStatusModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      {txHash ? <TransactionConfirmed txHash={txHash} /> : <TransactionPending swapText={swapText} />}
+      {txHash ? <TransactionConfirmed txHash={txHash} /> : <TransactionPending text={pendingText} />}
     </Modal>
   )
 }

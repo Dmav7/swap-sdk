@@ -22,7 +22,7 @@ import Tooltips from '@components/Tooltips'
 import { useWidgetWallet, watchAsset } from '@states/wallet'
 import { TokenConfig } from '@config/tokens'
 import { TokenLogo } from '@components/TokenLogo'
-import { BuiltInChainId, executeTrade, TradeType, utils, wrap, unwrap } from '@vvs-finance/swap-sdk'
+import { BuiltInChainId, executeTrade, TradeType, utils, wrapNative, unwrapNative } from '@vvs-finance/swap-sdk'
 import { useBestTrade } from '@states/useBestTrade'
 import getWatchAssetParameters from '@utils/getWatchAssetParameters'
 import computePriceImpact from '@utils/computePriceImpact'
@@ -31,27 +31,8 @@ import useSettings from '@states/useSettings'
 import useTransactionDeadline from '@states/useTransactionDeadline'
 import { useTokenBalance } from '@states/balance'
 import { Fraction } from 'bi-fraction'
-import useAllowance from '@states/useAllowance'
-import useApprove from '@states/useApprove'
-
-const SELECT_AMOUNT_PERCENTAGE: { label: string; value: number }[] = [
-  {
-    label: '25%',
-    value: 0.25,
-  },
-  {
-    label: '50%',
-    value: 0.5,
-  },
-  {
-    label: '75%',
-    value: 0.75,
-  },
-  {
-    label: 'Max',
-    value: 1,
-  },
-]
+import { useErc20Approval } from '@states/useErc20Approval'
+import { TransactionResponse } from 'ethers'
 
 export interface SwapWidgetComponentProps {
   inputToken?: TokenConfig
@@ -80,7 +61,6 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
   const [isValidAddress, setIsValidAddress] = useState(true)
   const [enabled, setEnabled] = useState(false)
   const [isReservePrice, setReversePrice] = useState(false)
-  const [buttonLabel, setButtonLabel] = useState('Swap')
 
   const [inputToken, setInputToken] = useState<Undefined<TokenConfig>>(inputTokenFromProps)
   const [outputToken, setOutputToken] = useState<Undefined<TokenConfig>>(outputTokenFromProps)
@@ -135,16 +115,16 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
   const [isOutputSelectTokenModalOpen, setIsOutputSelectTokenModalOpen] = useState(false)
   const [isOpenSettingModal, setOpenSettingModal] = useState(false)
   const [isOpenRoutePathModal, setIsOpenRoutePathModal] = useState(false)
-  const [isOpenTxStatusModal, setIsOpenTxStatusModal] = useState(false)
-  const [toastStatus, setToastStatus] = useState<Undefined<'success' | 'fail'>>(undefined)
-  const [errorMessage, setErrorMessage] = useState<Undefined<string>>(undefined)
-
-  const [txHash, setTxHash] = useState<Undefined<string>>(undefined)
+  const [toast, setToast] =
+    useState<Undefined<{ status: 'success' | 'fail'; text: string; txHash?: string }>>(undefined)
+  const [tradeTxStatus, setTradeTxStatus] = useState<Undefined<{ text: string; txHash?: string }>>(undefined)
 
   useEffect(() => {
-    if (!inputToken) setInputToken(inputTokenFromProps)
-    if (!outputToken) setOutputToken(outputTokenFromProps)
-  }, [supportedChainId, inputTokenFromProps, outputTokenFromProps, inputToken, outputToken])
+    setInputToken(inputTokenFromProps)
+  }, [supportedChainId, inputTokenFromProps])
+  useEffect(() => {
+    setOutputToken(outputTokenFromProps)
+  }, [supportedChainId, outputTokenFromProps])
 
   useEffect(() => {
     const trade = bestTrade.data
@@ -166,6 +146,13 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
   const exchangeInputAndOutputToken = () => {
     setInputToken(outputToken)
     setOutputToken(inputToken)
+    if (tradeType === TradeType.EXACT_INPUT) {
+      setOutputAmount(inputAmount)
+      setTradeType(TradeType.EXACT_OUTPUT)
+    } else {
+      setInputAmount(outputAmount)
+      setTradeType(TradeType.EXACT_INPUT)
+    }
   }
 
   const inputTokenAddress = useAdapterNativeToken(inputToken?.address ?? '')
@@ -175,80 +162,8 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
 
   const priceImpact = computePriceImpact(bestTrade.data, data ?? [])
 
-  const inputTokenBalance = useTokenBalance(inputToken?.address ?? '')
-  const outputTokenBalance = useTokenBalance(outputToken?.address ?? '')
-
-  const handleConfirmSwap = useCallback(async () => {
-    setIsOpenConfirmModal(false)
-    setIsOpenTxStatusModal(true)
-
-    if (bestTrade.data && !bestTrade.isLoading && signer) {
-      try {
-        let tx
-
-        if (isWrappedNativeToken) {
-          tx = await wrap(supportedChainId, signer, {
-            value: BigInt(
-              bestTrade.data.amountIn.amount
-                .shl(utils.getNativeTokenInfo(supportedChainId)?.decimals ?? 18)
-                .toPrecision(),
-            ),
-            gasPrice: txSpeed,
-          })
-        }
-
-        if (isUnWrappedNativeToken) {
-          tx = await unwrap(
-            bestTrade.data.amountIn.amount
-              .shl(utils.getWrappedNativeTokenInfo(supportedChainId)?.decimals ?? 18)
-              .toPrecision(),
-            supportedChainId,
-            signer,
-            {
-              gasPrice: txSpeed,
-            },
-          )
-        }
-
-        if (!isWrappedOrUnWrappedNativeToken) {
-          tx = await executeTrade(supportedChainId, bestTrade.data, signer, {
-            recipient: otherWallet ? otherWallet : account,
-            deadlineOrPreviousBlockhash: deadline,
-            gasPrice: txSpeed,
-          })
-        }
-
-        setTxHash(tx?.hash)
-
-        const receipt = await tx?.wait()
-
-        if (receipt && receipt?.status === 1) {
-          inputTokenBalance?.mutate()
-          outputTokenBalance?.mutate()
-
-          setToastStatus('success')
-        }
-      } catch (error) {
-        console.error(error)
-        setErrorMessage(typeof error === 'string' ? error : error instanceof Error ? error.message : 'Unknown error')
-        setToastStatus('fail')
-      }
-    }
-  }, [
-    bestTrade.data,
-    bestTrade.isLoading,
-    account,
-    signer,
-    supportedChainId,
-    otherWallet,
-    deadline,
-    txSpeed,
-    isUnWrappedNativeToken,
-    isWrappedNativeToken,
-    isWrappedOrUnWrappedNativeToken,
-    inputTokenBalance,
-    outputTokenBalance,
-  ])
+  const inputTokenBalance = useTokenBalance(inputToken)
+  const outputTokenBalance = useTokenBalance(outputToken)
 
   const getMinReceivedOrMaxSold = useMemo(() => {
     if (bestTrade.data?.slippage.type === 'minimumReceived') {
@@ -271,45 +186,137 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
     [data, isReservePrice],
   )
 
-  const { getAllowance, allowanceAmount } = useAllowance(inputToken?.address ?? '')
-  const { getApprove } = useApprove(inputToken?.address ?? '')
+  const { isApprovalNeeded, isApprovalLoading, approve, isApproving } = useErc20Approval(bestTrade.data)
 
-  const isInsufficientBalance = useMemo(
-    () =>
+  const tryTxActionWithToast = async (action: () => Promise<void | [tx: TransactionResponse, msg: string]>) => {
+    try {
+      const txMsg = await action()
+      if (txMsg) {
+        const [tx, msg] = txMsg
+        await tx.wait()
+        setToast({ status: 'success', text: msg, txHash: tx.hash })
+      }
+    } catch (error) {
+      console.error(error)
+      setToast({
+        status: 'fail',
+        text: typeof error === 'string' ? error : error instanceof Error ? error.message : 'Unknown error',
+      })
+    }
+  }
+
+  const tradeMsg = (verb: string) =>
+    `${verb} ${inputAmount} ${inputToken?.symbol} to ${outputAmount} ${outputToken?.symbol}`
+
+  const [actionBtnLabel, handleActionBtnClick] = ((): [string] | [string, () => void] => {
+    if (!account || !signer)
+      return [
+        'Connect Wallet',
+        () => {
+          if (onRequestWalletConnection) {
+            return onRequestWalletConnection()
+          } else {
+            setIsWalletModalOpen(true)
+          }
+        },
+      ]
+
+    if (!inputToken || !outputToken) return ['Select Token']
+    if (!inputAmount || !outputAmount) return ['Input Amount']
+
+    if (!bestTrade.data || isApprovalLoading) return ['Loading...']
+    const bestTradeData = bestTrade.data
+
+    const isInsufficientBalance =
       tradeType === TradeType.EXACT_INPUT
         ? new Fraction(inputAmount).gt(inputTokenBalance?.data ?? 0)
-        : new Fraction(outputAmount).gt(outputTokenBalance?.data ?? 0),
-    [inputAmount, outputAmount, inputTokenBalance, outputTokenBalance, tradeType],
-  )
+        : new Fraction(outputAmount).gt(outputTokenBalance?.data ?? 0)
+    if (isInsufficientBalance) return ['Insufficient Balance']
 
-  const isDisabledSwap = useMemo(
-    () =>
-      account && (inputAmount === '' || outputAmount === '' || inputToken === undefined || outputToken === undefined),
-    [account, inputAmount, outputAmount, inputToken, outputToken],
-  )
+    if (isWrappedNativeToken)
+      return [
+        'Wrap',
+        () => {
+          tryTxActionWithToast(async () => {
+            setTradeTxStatus({ text: tradeMsg('Wrapping') })
+            const tx = await wrapNative(
+              supportedChainId,
+              BigInt(
+                bestTradeData.amountIn.amount
+                  .shl(utils.getNativeTokenInfo(supportedChainId)?.decimals ?? 18)
+                  .toPrecision(),
+              ),
+              signer,
+              { gasPrice: txSpeed },
+            )
+            setTradeTxStatus((status) => ({ ...status!, txHash: tx.hash }))
+            return [tx, tradeMsg('Wrapped')]
+          })
+        },
+      ]
+    if (isUnWrappedNativeToken)
+      return [
+        'Unwrap',
+        () => {
+          tryTxActionWithToast(async () => {
+            setTradeTxStatus({ text: tradeMsg('Unwrapping') })
+            const tx = await unwrapNative(
+              supportedChainId,
+              bestTradeData.amountIn.amount
+                .shl(utils.getWrappedNativeTokenInfo(supportedChainId)?.decimals ?? 18)
+                .toPrecision(),
+              signer,
+              { gasPrice: txSpeed },
+            )
+            setTradeTxStatus((status) => ({ ...status!, txHash: tx.hash }))
+            return [tx, tradeMsg('Unwrapped')]
+          })
+        },
+      ]
 
-  const getButtonLabel = useCallback(async () => {
-    if (!account) {
-      return 'Connect Wallet'
-    }
+    if (isApproving) return ['Approving']
 
-    if (isInsufficientBalance) return 'Insufficient Balance'
+    if (isApprovalNeeded)
+      return [
+        'Approve',
+        () => {
+          tryTxActionWithToast(async () => {
+            const tx = await approve()
+            if (tx) {
+              return [tx, `Approved ${inputAmount} ${inputToken?.symbol}`]
+            }
+          })
+        },
+      ]
 
-    if (isWrappedNativeToken) return 'Wrap'
-    if (isUnWrappedNativeToken) return 'Unwrap'
+    return [
+      'Swap',
+      () => {
+        setIsOpenConfirmModal(true)
+      },
+    ]
+  })()
 
-    const latestAllowanceAmount = await getAllowance()
+  const handleConfirmSwap = async () => {
+    if (!bestTrade.data || !signer) return
+    const bestTradeData = bestTrade.data
 
-    if (latestAllowanceAmount?.toString() === '0') {
-      return 'Approve'
-    }
+    setIsOpenConfirmModal(false)
+    setTradeTxStatus({ text: tradeMsg('Swapping') })
 
-    return 'Swap'
-  }, [account, getAllowance, isWrappedNativeToken, isUnWrappedNativeToken, isInsufficientBalance])
-
-  useEffect(() => {
-    getButtonLabel().then((label) => setButtonLabel(label))
-  }, [getButtonLabel])
+    tryTxActionWithToast(async () => {
+      const tx = await executeTrade(supportedChainId, bestTradeData, signer, {
+        recipient: otherWallet ? otherWallet : account,
+        deadlineOrPreviousBlockhash: deadline,
+        gasPrice: txSpeed,
+      })
+      setTradeTxStatus((status) => ({ ...status!, txHash: tx.hash }))
+      return [tx, tradeMsg('Swapped')]
+    }).finally(() => {
+      inputTokenBalance?.mutate()
+      outputTokenBalance?.mutate()
+    })
+  }
 
   return (
     <div className="min-w-96 mx-auto p-6 bg-light rounded-lg shadow-md text-black">
@@ -378,12 +385,14 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
         </div>
       </div>
       <div className="relative">
-        <div
-          className="absolute left-1/2 -translate-x-1/2 -translate-y-3/4 shadow-lg p-2 rounded-xl cursor-pointer bg-primary hover:bg-primary-800"
-          onClick={exchangeInputAndOutputToken}
-        >
-          <ArrowUpDown width={24} height={24} />
-        </div>
+        {!inputTokenFromProps && !outputTokenFromProps && (
+          <div
+            className="absolute left-1/2 -translate-x-1/2 -translate-y-3/4 shadow-lg p-2 rounded-xl cursor-pointer bg-primary hover:bg-primary-800"
+            onClick={exchangeInputAndOutputToken}
+          >
+            <ArrowUpDown width={24} height={24} />
+          </div>
+        )}
       </div>
       <div className="mb-5 p-4 rounded-xl bg-white">
         <label className="block text-black text-sm font-medium mb-2">You Receive (estimated)</label>
@@ -457,46 +466,19 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
 
       <div className="flex justify-center my-4">
         <button
-          onClick={async () => {
-            if (!account) {
-              if (onRequestWalletConnection) {
-                return onRequestWalletConnection()
-              }
-              setIsWalletModalOpen(true)
-              return null
-            }
-
-            if (isInsufficientBalance || isDisabledSwap) return null
-
-            if (allowanceAmount?.toString() === '0') {
-              await getApprove()
-
-              const label = await getButtonLabel()
-              setButtonLabel(label)
-
-              return null
-            }
-
-            if (isWrappedOrUnWrappedNativeToken) {
-              handleConfirmSwap()
-
-              return null
-            }
-
-            setIsOpenConfirmModal(true)
-          }}
+          onClick={handleActionBtnClick}
           className={clsx(
             'w-full px-6 py-3.5 text-base font-medium text-white bg-primary hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center',
             {
-              'cursor-not-allowed bg-primary-500 hover:bg-primary-500': isInsufficientBalance || isDisabledSwap,
+              'cursor-not-allowed bg-primary-500 hover:bg-primary-500': !handleActionBtnClick,
             },
           )}
         >
-          {buttonLabel}
+          {actionBtnLabel}
         </button>
       </div>
 
-      {!isWrappedOrUnWrappedNativeToken && !isInsufficientBalance && bestTrade?.data && (
+      {!isWrappedOrUnWrappedNativeToken && bestTrade?.data && (
         <div className="flex flex-col gap-2">
           <SwapInfoItem
             label={tradeTypeLabel}
@@ -606,10 +588,12 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
         handleConfirmSwap={handleConfirmSwap}
       />
       <TransactionStatusModal
-        txHash={txHash}
-        swapText={`${!isWrappedOrUnWrappedNativeToken ? 'Swapping' : isUnWrappedNativeToken ? 'Unwrapping' : 'Wrapping'} ${inputAmount} ${inputToken?.symbol} for ${outputAmount} ${outputToken?.symbol}`}
-        isOpen={isOpenTxStatusModal}
-        onClose={() => setIsOpenTxStatusModal(false)}
+        isOpen={!!tradeTxStatus}
+        pendingText={tradeTxStatus?.text}
+        txHash={tradeTxStatus?.txHash}
+        onClose={() => {
+          setTradeTxStatus(undefined)
+        }}
       />
       <SelectTokenModal
         isOpen={isInputSelectTokenModalOpen}
@@ -636,13 +620,7 @@ export const SwapWidgetComponent: React.FC<SwapWidgetComponentProps> = ({
         }}
       />
       <SettingModal isOpen={isOpenSettingModal} onClose={() => setOpenSettingModal(false)} />
-      <Toast
-        isOpen={!!toastStatus}
-        status={toastStatus ?? 'fail'}
-        text={`${!isWrappedOrUnWrappedNativeToken ? 'Swapped' : isUnWrappedNativeToken ? 'Unwrapped' : 'Wrapped'} ${inputAmount} ${inputToken?.symbol} for ${outputAmount} ${outputToken?.symbol}`}
-        errorMessage={errorMessage}
-        onClose={() => setToastStatus(undefined)}
-      />
+      <Toast isOpen={!!toast} status={toast?.status} text={toast?.text} onClose={() => setToast(undefined)} />
       <RoutePathModal
         routes={bestTrade.data?.routes ?? []}
         isOpen={isOpenRoutePathModal}
@@ -662,3 +640,22 @@ const SwapInfoItem = ({ label, children, tooltips }: { label: string; children: 
     <div className="text-sm font-medium text-primaryBlack">{children}</div>
   </div>
 )
+
+const SELECT_AMOUNT_PERCENTAGE: { label: string; value: number }[] = [
+  {
+    label: '25%',
+    value: 0.25,
+  },
+  {
+    label: '50%',
+    value: 0.5,
+  },
+  {
+    label: '75%',
+    value: 0.75,
+  },
+  {
+    label: 'Max',
+    value: 1,
+  },
+]

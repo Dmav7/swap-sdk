@@ -3,3 +3,4 @@
 /* eslint-disable */
 export { ERC20__factory } from './ERC20__factory'
 export { SmartRouter__factory } from './SmartRouter__factory'
+export { WCRO__factory } from './WCRO__factory'

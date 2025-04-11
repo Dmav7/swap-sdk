@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import clsx from 'clsx'
 
 import Yes from '@icons/Yes.svg?react'
@@ -9,14 +8,15 @@ import useChainProviderOptions from '@hooks/useChainProviderOptions'
 export interface ToastProps {
   isOpen: boolean
   onClose: VoidFunction
-  status: 'success' | 'fail'
+  status?: 'success' | 'fail'
   text?: string
   txHash?: string
   errorMessage?: string
 }
 
-export default function Toast({ isOpen, onClose, status, txHash, text, errorMessage }: ToastProps) {
-  const isSuccess = useMemo(() => status === 'success', [status])
+export default function Toast({ isOpen, onClose, status, txHash, text }: ToastProps) {
+  const isSuccess = status === 'success'
+  const isFail = status === 'fail'
   const { chainExplorerBaseUrl, chainProviderOptions } = useChainProviderOptions()
 
   return (
@@ -26,8 +26,15 @@ export default function Toast({ isOpen, onClose, status, txHash, text, errorMess
         isOpen ? 'right-14' : 'right-[100px] opacity-0',
       )}
     >
-      <div className={clsx('flex items-center px-3 w-[42px] h-full rounded-l-xl', isSuccess ? 'bg-green' : 'bg-red')}>
-        {isSuccess ? <Yes width={18} height={12} /> : <No width={18} height={18} />}
+      <div
+        className={clsx(
+          'flex items-center px-3 w-[42px] h-full rounded-l-xl',
+          isSuccess && 'bg-green',
+          isFail && 'bg-red',
+        )}
+      >
+        {isSuccess && <Yes width={18} height={12} />}
+        {isFail && <No width={18} height={18} />}
       </div>
 
       <div className="flex flex-col gap-2 justify-start w-full p-[18px]">
@@ -50,7 +57,7 @@ export default function Toast({ isOpen, onClose, status, txHash, text, errorMess
             </a>
           </>
         ) : (
-          <div className="text-darkGray text-sm overflow-hidden">{errorMessage}</div>
+          <div className="text-darkGray text-sm overflow-hidden">{text}</div>
         )}
       </div>
     </div>

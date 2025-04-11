@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { CHAIN_EXPLORER_BASE_URL, CHAIN_PROVIDER_OPTIONS } from '@config/chains'
+import { CHAIN_PROVIDER_OPTIONS } from '@vvs-finance/swap-sdk'
+import { CHAIN_EXPLORER_BASE_URL } from '@config/chains'
 import { useWidgetWallet } from '@states/wallet'
 
 const useChainProviderOptions = () => {

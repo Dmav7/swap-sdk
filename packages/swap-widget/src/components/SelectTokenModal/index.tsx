@@ -48,7 +48,7 @@ function SelectTokenModal({ isOpen, onClose, onTokenSelect, tokens }: SelectToke
 export default SelectTokenModal
 
 function TokenListItem({ tokenConfig, onClick }: { tokenConfig: TokenConfig; onClick: VoidFunction }) {
-  const balance = useTokenBalance(tokenConfig.address)
+  const balance = useTokenBalance(tokenConfig)
   const { chainExplorerBaseUrl } = useChainProviderOptions()
 
   return (

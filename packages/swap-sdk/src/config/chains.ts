@@ -1,4 +1,5 @@
 import { BuiltInChainId, ChainConfig } from '../types'
+import type { ProviderOptions } from '../utils'
 
 export const CHAIN_CONFIGS: Record<number, ChainConfig> = {
   [BuiltInChainId.CRONOS_MAINNET]: {
@@ -32,3 +33,16 @@ export const CHAIN_CONFIGS: Record<number, ChainConfig> = {
     },
   },
 } satisfies Record<BuiltInChainId, ChainConfig>
+
+export const CHAIN_PROVIDER_OPTIONS: Record<number, ProviderOptions> = {
+  [BuiltInChainId.CRONOS_MAINNET]: {
+    chainId: BuiltInChainId.CRONOS_MAINNET,
+    chainName: 'Cronos',
+    rpcUrl: 'https://evm.cronos.org/',
+  },
+  [BuiltInChainId.CRONOS_TESTNET]: {
+    chainId: BuiltInChainId.CRONOS_TESTNET,
+    chainName: 'Cronos Testnet',
+    rpcUrl: 'https://evm-t3.cronos.org/',
+  },
+} satisfies Record<BuiltInChainId, ProviderOptions>

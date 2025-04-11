@@ -7,9 +7,17 @@ import type { ExecuteTradeOptions, TradeTxOptions } from './executeTrade'
 import { executeTrade, prepareTradeTxRequest } from './executeTrade'
 import type { AmountArg, InputOutputTokenArg } from './fetchBestTrade'
 import { fetchBestTrade } from './fetchBestTrade'
-import type { BestAMMTradeOpts, SignerOrProvider, Trade, ERC20, SmartRouter, ChainConfig } from './types'
+import type {
+  BestAMMTradeOpts,
+  SignerOrProvider,
+  Trade,
+  ERC20,
+  SmartRouter,
+  ChainConfig,
+  BuiltInChainId,
+} from './types'
 import type { ProviderOptions } from './utils'
-import { getContract, getProvider } from './utils'
+import { getContract } from './utils'
 import { IncompleteChainConfigError, NoQuoteApiEndpointError, NoQuoteApiChainNameError } from './errors'
 
 export interface SDKOptions {
@@ -82,13 +90,9 @@ export class SwapSDK {
   private getContract = <T extends BaseContract = BaseContract>(
     address: string,
     abi: InterfaceAbi,
-    signerOrProvider?: SignerOrProvider,
+    chainIdOrSignerOrProvider?: BuiltInChainId | SignerOrProvider,
   ): T => {
-    if (!signerOrProvider) {
-      signerOrProvider = getProvider(this.providerOptions)
-    }
-
-    return getContract<T>(address, abi, signerOrProvider)
+    return getContract<T>(address, abi, chainIdOrSignerOrProvider)
   }
 
   public getQuoteApiEndpoint() {
