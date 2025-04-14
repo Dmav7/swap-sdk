@@ -33,20 +33,25 @@ To fetch the best trade, you can use the `fetchBestTrade` function. This functio
 #### Example
 
 ```typescript
-import { fetchBestTrade, PoolType, BuiltInChainId } from '@vvs-finance/swap-sdk'
+import { fetchBestTrade, PoolType, BuiltInChainId, utils as SwapSdkUtils } from '@vvs-finance/swap-sdk'
 
-const chainId = BuiltInChainId.CRONOS_MAINNET
-const inputToken = 'NATIVE'
-const outputToken = '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03'
+const chainId = BuiltInChainId.CRONOS_TESTNET
+const inputToken = '0x904Bd5a5AAC0B9d88A0D47864724218986Ad4a3a'
+const outputToken = 'NATIVE'
 const amount = '2.5'
 
 fetchBestTrade(chainId, inputToken, outputToken, amount, {
   poolTypes: [PoolType.V2, PoolType.V3_100, PoolType.V3_500, PoolType.V3_3000, PoolType.V3_10000],
-  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
+  maxHops: 3,
+  maxSplits: 2,
+  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_338 in nodejs
 }).then((trade) => {
+  console.log(`fetchBestTrade: ${SwapSdkUtils.formatTrade(trade)}`)
   console.log(trade)
 })
 ```
+
+see [`fetchBestTrade.mjs`](./examples/swap-sdk-example/src/fetchBestTrade.mjs) under [swap-sdk-example](./examples/swap-sdk-example).
 
 ### Executing a Trade via `executeTrade`
 
@@ -59,25 +64,46 @@ To execute a trade, you can use the `executeTrade` function. This function takes
 #### Example
 
 ```typescript
-import { fetchBestTrade, executeTrade, BuiltInChainId } from '@vvs-finance/swap-sdk'
+import {
+  fetchBestTrade,
+  executeTrade,
+  BuiltInChainId,
+  PoolType,
+  approveIfNeeded,
+  utils as SwapSdkUtils,
+} from '@vvs-finance/swap-sdk'
 import { ethers } from 'ethers'
 
-const chainId = BuiltInChainId.CRONOS_MAINNET
-const inputToken = 'NATIVE'
-const outputToken = '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03'
+const chainId = BuiltInChainId.CRONOS_TESTNET
+const inputToken = '0x904Bd5a5AAC0B9d88A0D47864724218986Ad4a3a'
+const outputToken = 'NATIVE'
 const amount = '2.5'
 
 fetchBestTrade(chainId, inputToken, outputToken, amount, {
-  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
+  poolTypes: [PoolType.V2, PoolType.V3_100, PoolType.V3_500, PoolType.V3_3000, PoolType.V3_10000],
+  maxHops: 3,
+  maxSplits: 2,
+  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_338 in nodejs
 }).then(async (trade) => {
+  console.log(`fetchBestTrade: ${SwapSdkUtils.formatTrade(trade)}`)
   console.log(trade)
-  const provider = new ethers.BrowserProvider(window.ethereum)
+
+  const provider = new ethers.BrowserProvider(window.ethereum, chainId)
   const signer = await provider.getSigner()
+  console.log(`signer.address: ${signer.address}`)
+
+  const approvalTx = await approveIfNeeded(chainId, trade, signer)
+  if (approvalTx) {
+    console.log(`approveIfNeeded: ${approvalTx.hash}`)
+    await approvalTx.wait()
+  }
+
   const tx = await executeTrade(chainId, trade, signer)
-  console.log(tx)
-  return tx.wait()
+  console.log(`executeTrade: ${tx.hash}`)
 })
 ```
+
+see [`executeTrade.mjs`](./examples/swap-sdk-example/src/executeTrade.mjs) under [swap-sdk-example](./examples/swap-sdk-example).
 
 ### Executing a Trade via your own web3 interface
 
@@ -90,126 +116,63 @@ To execute a trade with your own web3 interface, you can use the `prepareTradeTx
 #### Example
 
 ```typescript
-import { fetchBestTrade, BuiltInChainId, prepareTradeTxRequest } from '@vvs-finance/swap-sdk'
-import { ethers } from 'ethers'
+import {
+  fetchBestTrade,
+  PoolType,
+  prepareTradeTxRequest,
+  prepareApprovalTxRequestIfNeeded,
+  utils as SwapSdkUtils,
+} from '@vvs-finance/swap-sdk'
+import { createPublicClient, createWalletClient, custom } from 'viem'
+import * as viemChains from 'viem/chains'
 
-const chainId = BuiltInChainId.CRONOS_MAINNET
-const inputToken = 'NATIVE'
-const outputToken = '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03'
+const chain = viemChains.cronosTestnet
+const chainId = chain.id
+const inputToken = '0x904Bd5a5AAC0B9d88A0D47864724218986Ad4a3a'
+const outputToken = 'NATIVE'
 const amount = '2.5'
 
-const provider = new ethers.JsonRpcProvider('https://evm.cronos.org/')
-const wallet = new ethers.Wallet('PRIVATE_KEY', provider)
-
 fetchBestTrade(chainId, inputToken, outputToken, amount, {
-  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_25
+  poolTypes: [PoolType.V2, PoolType.V3_100, PoolType.V3_500, PoolType.V3_3000, PoolType.V3_10000],
+  maxHops: 3,
+  maxSplits: 2,
+  quoteApiClientId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', // or set process.env.SWAP_SDK_QUOTE_API_CLIENT_ID_338 in nodejs
 }).then(async (trade) => {
+  console.log(`fetchBestTrade: ${SwapSdkUtils.formatTrade(trade)}`)
   console.log(trade)
-  const txRequest = prepareTradeTxRequest(chainId, trade, wallet.address)
-  const tx = await wallet.sendTransaction(txRequest)
-  console.log({ txRequest, tx })
-  return tx.wait()
+
+  const viemClient = {
+    public: createPublicClient({ chain, transport: custom(window.ethereum) }),
+    wallet: createWalletClient({
+      chain,
+      transport: custom(window.ethereum),
+      account: (await window.ethereum.request({ method: 'eth_requestAccounts' }))[0],
+    }),
+  }
+
+  const [address] = await viemClient.wallet.getAddresses()
+  console.log(`viemClient.wallet.getAddresses(): ${address}`)
+
+  const approvalTxRequest = await prepareApprovalTxRequestIfNeeded(chainId, trade, address)
+  if (approvalTxRequest) {
+    console.log('prepareApprovalTxRequestIfNeeded:', approvalTxRequest)
+    const approvalTxHash = await viemClient.wallet.sendTransaction(approvalTxRequest)
+    console.log(`ERC20 approval tx sent: ${approvalTxHash}`)
+    await viemClient.public.waitForTransactionReceipt({ hash: approvalTxHash })
+  }
+
+  const tradeTxRequest = prepareTradeTxRequest(config.chain.id, trade, address)
+  console.log('prepareTradeTxRequest:', tradeTxRequest)
+  const txHash = await viemClient.wallet.sendTransaction(tradeTxRequest)
+  console.log(`trade sent: ${txHash}`)
 })
 ```
 
-### API Reference
+see [`prepareTradeTxRequest.mjs`](./examples/swap-sdk-example/src/prepareTradeTxRequest.mjs) under [swap-sdk-example](./examples/swap-sdk-example).
 
-#### `fetchBestTrade`
+### `@vvs-finance/swap-sdk` API Reference
 
-Fetches the best trade for the given parameters.
-
-##### Parameters
-
-- `chainId`: The ID of the blockchain network. can be:
-  - `BuiltInChainId.CRONOS_MAINNET` (25)
-  - `BuiltInChainId.CRONOS_TESTNET` (338)
-- `inputTokenAddressArg`: The address of the input token or "NATIVE" for the native token.
-- `outputTokenAddressArg`: The address of the output token or "NATIVE" for the native token.
-- `amount`: The amount to be used as input or output.
-- `argOpts`: `Partial<BestAMMTradeOpts>` - Optional arguments for the trade.
-  - `tradeType`: `TradeType.EXACT_INPUT` or `TradeType.EXACT_OUTPUT`
-    - By default `tradeType` is `TradeType.EXACT_INPUT`
-    - When set to `TradeType.EXACT_OUTPUT`, `amount` will be used as output amount
-  - `maxHops`: how much steps to consider between input and output token
-    - default: `1`, max: `3`
-  - `maxSplits`: for example swapping 100 CRO to VVS, `{ maxSplits: 2 }` means the algorithm will consider splitting 100 CRO into 2 parts: 5 and 95 CRO to VVS, then 10 and 90 CRO to VVS...to see which one is most beneficial
-    - default: `1`, max: `2`
-  - `poolTypes`: pool types to consider
-    - possible types: `PoolType.V2`, `PoolType.V3_100`, `PoolType.V3_500`, `PoolType.V3_3000` and `PoolType.V3_10000`
-    - default: `[PoolType.V2]`
-  - `slippageTolerance`,
-    - When `TradeType.EXACT_INPUT`: this is used to calculate minimal output amount, transaction will revert if contract can't send out such amount
-    - When `TradeType.EXACT_OUTPUT`: this is used to calculate maximum input amount, transaction will revert if contract is using more than such amount
-  - `quoteApiEndpoint`: URL of quote API endpoint to overwrite
-  - `quoteApiClientId`: client ID for accessing the quote API
-
-Environment variables:
-
-- `SWAP_SDK_QUOTE_API_CLIENT_ID_${chainId}`: client ID for accessing the quote API
-  - `SWAP_SDK_QUOTE_API_CLIENT_ID_25`: for cronos mainnet
-  - `SWAP_SDK_QUOTE_API_CLIENT_ID_338`: for cronos testnet
-- `SWAP_SDK_QUOTE_API_ENDPOINT_${chainId}`: Optional custom API endpoint
-  - `SWAP_SDK_QUOTE_API_ENDPOINT_25`: for cronos mainnet
-  - `SWAP_SDK_QUOTE_API_ENDPOINT_338`: for cronos testnet
-
-##### Returns
-
-- `Promise<Trade>` - A promise that resolves to the trade object. This object contains `amountIn`, `amountOut`, `routes`
-
-#### `executeTrade`
-
-Executes the given trade on the blockchain.
-
-##### Parameters
-
-- `chainId`: The ID of the blockchain network. can be:
-  - `BuiltInChainId.CRONOS_MAINNET`
-  - `BuiltInChainId.CRONOS_TESTNET`
-- `trade`: `Trade` - The trade object obtained from `fetchBestTrade`.
-- `signer`: `Signer` - The signer object to sign the transaction.
-- `options`: `ExecuteTradeOptions` - Optional arguments for executing the trade.
-  - `recipient`: where output token should be sent
-  - `deadlineOrPreviousBlockhash`
-  - `fee`: compensation for token taxes
-  - `routerAddress`: SmartRouter contract address to overwrite
-
-##### Returns
-
-- `Promise<TransactionResponse>` - A promise that resolves to the transaction response.
-
-#### `prepareTradeTxRequest`
-
-Encode calldata and prepare transaction request object.
-
-##### Parameters
-
-- `chainId`: The ID of the blockchain network. can be:
-  - `BuiltInChainId.CRONOS_MAINNET`
-  - `BuiltInChainId.CRONOS_TESTNET`
-- `trade`: `Trade` - The trade object obtained from `fetchBestTrade`.
-- `recipient`: where output token should be sent
-- `options`: `TradeTxOptions` - Optional arguments for executing the trade.
-  - `deadlineOrPreviousBlockhash`
-  - `fee`: compensation for token taxes
-  - `routerAddress`: SmartRouter contract address to overwrite
-
-##### Returns
-
-- `ethers.TransactionReceipt` - transaction request object. This object contains `to`, `data`, `value`
-
-### `swap-sdk` Development
-
-```shell
-git clone https://github.com/vvs-finance/swap-sdk
-cd swap-sdk
-pnpm install
-cp .env.example .env
-pnpm test
-pnpm test:swap-sdk -- packages/swap-sdk/test/development.test.ts # run a test suite file in swap-sdk
-```
-
-- package source entrypoint: `packages/swap-sdk/src/index.ts`
-- tests: `packages/swap-sdk/test/`
+see [here](./packages/swap-sdk/README.md#api-reference)
 
 ### VVS Finance Swap Widget
 

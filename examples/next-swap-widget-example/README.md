@@ -2,8 +2,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-To access our quote API, please submit a ticket in our [Discord](https://discord.com/invite/V2957zMsmg) to request a client ID.
-
 ```bash
 git clone https://github.com/vvs-finance/swap-sdk.git
 cd swap-sdk/examples/next-swap-widget-example
@@ -13,6 +11,8 @@ cp .env.example .env # edit .env filling NEXT_PUBLIC_SWAP_WIDGET_QUOTE_API_CLIEN
 
 npm run dev
 ```
+
+Please see [here](https://github.com/vvs-finance/swap-sdk?tab=readme-ov-file#prepare-quote-api-client-id) for `NEXT_PUBLIC_SWAP_WIDGET_QUOTE_API_CLIENT_ID_${chainId}`.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "dotenvx run -- turbo dev @vvs-finance/swap-sdk#dev:build @vvs-finance/swap-sdk#dev:tsc @vvs-finance/swap-widget#dev:build @vvs-finance/swap-widget#dev:tsc",
     "dev:widget": "dotenvx run -- turbo dev:widget @vvs-finance/swap-widget#dev:tsc",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "format-check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{js,mjs,jsx,ts,tsx,md}\"",
+    "format-check": "prettier --check \"**/*.{js,mjs,jsx,ts,tsx,md}\"",
     "lint": "dotenvx run -- turbo lint",
     "ts-check": "dotenvx run -- turbo ts-check",
     "test": "dotenvx run -- turbo test",

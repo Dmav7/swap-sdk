@@ -1,7 +1,5 @@
 # VVS Finance Swap Widget
 
-**⚠️ Work in Progress: `@vvs-finance/swap-widget` is currently under development and may undergo significant changes. Use at your own risk.**
-
 `@vvs-finance/swap-widget` is a React library that provides a `<SwapWidget />` component for integrating a swap widget into your application.
 
 ## Installation
@@ -43,13 +41,14 @@ function App() {
 export default App
 ```
 
-For example, a simple Next.js page [index.tsx](../../examples/next-swap-widget-example/src/pages/index.tsx) in [next-swap-widget-example](../../examples/next-swap-widget-example/)
+For examples:
+
+- Simple Next.js page [index.tsx](../../examples/next-swap-widget-example/src/pages/index.tsx) in [next-swap-widget-example](../../examples/next-swap-widget-example/)
+- Assign props like `inputToken` and `outputToken`: [App.tsx](./app/App.tsx)
 
 #### Quote API Client ID
 
-`<SwapWidget />` depends on our optimized quote API for best trading deal and smooth experience.
-
-To access our quote API, please submit a ticket in our [Discord](https://discord.com/invite/V2957zMsmg) to request a client ID.
+`<SwapWidget />` depends on our optimized quote API for best trading deal and smooth experience. Please see [here](https://github.com/vvs-finance/swap-sdk?tab=readme-ov-file#prepare-quote-api-client-id).
 
 It is best to manage client ID with environment variables depends on your project setup.
 
